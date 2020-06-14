@@ -86,11 +86,9 @@ def hide():
   waittype("The man suddenly stops. Seeing your chance, you dive under your bed and lay still."
   )
 
+  hideUnderBed()
+
   
-
-  options(['Follow the man', 'Look for the lights', 'Search the drawers'], [follow, look, findWeapon])
-
-
 
 def lightsTwo():
   """Looking for lights when the man is inside"""
@@ -126,6 +124,12 @@ def hideUnderBed():
   waittype("The doorknob jiggles before the man opens the door. He checks his surrondings before he steps inside your room.")
 
   waittype("He takes a flashlight out of his bag and shines it around the room. You see a thin rifle slung over his back and a knife in his pocket.")
+
+  waittype("He rummages around in your drawers. Your heart is punding furiously in your ribs as you try to keep your breathing quiet.")
+
+  waittype("The man closes the door quietly as he finally exits the room.")
+
+  options(['Follow the man', 'Look for the lights', 'Search the drawers'], [follow, look, findWeapon])
 
 
 def continueWithFlashlight():
