@@ -1,0 +1,5 @@
+# Here is the soodo changelog, where new updates will be posted.
+
+#June 11 - Li Feng Yin - Made new waittype function that automatically finds the time it takes to read a paragraph then waits for that long. It will also generate new lines (\n\n\n\n).
+
+#June 11 - Jeffrey Zang - Extended the hide() function
