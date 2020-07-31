@@ -136,6 +136,8 @@ def removeItem(item):
           return True
       except ValueError:
           return False
+
+  
       
 
 def checkItem(item):
@@ -165,20 +167,23 @@ def checkItem(item):
                 return "pockets"
             else:
                 return False
-        except ValueError: 
+        except ValueError:
             return False
 
 
 
 class invClass:
     def add(self, item):
-      addItem(item)
+        return addItem(item)
 
     def remove(self, item):
-      removeItem(item)
+        return removeItem(item)
 
+    def find(self, item):
+        return checkItem(item)
+    
     def has(self, item):
-      checkItem(item)
+        return checkItem(item) != False
       
     hands = []
     pockets = []
