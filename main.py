@@ -1,3 +1,10 @@
+"""
+Pukage
+Choose-your-own-adventure game.
+Copyright 2020 Daniel Zhang, Jeffery Zang, Li Feng Yin
+MIT License
+"""
+
 from random import randint
 from time import sleep as timeSleep
 import scrolltype
@@ -783,4 +790,6 @@ def settings():
 # paws = threading.Thread(target=pause)
 # paws.start()
 # mainThread = threading.main_thread()
-startingMenu()
+if __name__ == "__main__":
+    startingMenu()
+    

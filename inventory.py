@@ -1,3 +1,10 @@
+"""
+Pukage
+Choose-your-own-adventure game.
+Copyright 2020 Daniel Zhang, Jeffery Zang, Li Feng Yin
+MIT License
+"""
+
 from scrolltype import scrolltype
 from time import sleep
 from waittype import waittype
@@ -129,6 +136,38 @@ def removeItem(item):
           return True
       except ValueError:
           return False
+      
+
+def checkItem(item):
+    obj = itemsLibrary["removeArticles"](item)
+
+    try:
+        obj = itemsLibrary[obj]
+    except KeyError:
+        return print("Oops, that item is not inside itemsLibrary. Go add it now.")
+
+    if (obj.size == "nothing"):
+      return False
+
+    elif obj.size == "big":
+        try:
+            inv.hands[inv.hands.index(obj)]
+        except ValueError: 
+            return False
+
+        return True
+    
+    else:
+        try:
+            if inv.hands[inv.hands.index(obj)]:
+                return "hands"
+            elif inv.pockets[inv.pockets.index(obj)]:
+                return "pockets"
+            else:
+                return False
+        except ValueError: 
+            return False
+
 
 
 class invClass:
@@ -137,6 +176,9 @@ class invClass:
 
     def remove(self, item):
       removeItem(item)
+
+    def has(self, item):
+      checkItem(item)
       
     hands = []
     pockets = []

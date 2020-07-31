@@ -1,3 +1,10 @@
+"""
+Pukage
+Choose-your-own-adventure game.
+Copyright 2020 Daniel Zhang, Jeffery Zang, Li Feng Yin
+MIT License
+"""
+
 from random import randint
 from time import sleep as timeSleep
 import scrolltype
@@ -123,9 +130,9 @@ def bank():
 
 def leavingWithoutFollowingMan():
   """leaving the house without following the man"""
-  waittype("The wind outside hits you like a jet of icy water. You shiver and move the blanket draped around your neck to cover as much of your body as possible.")
-  
-  waittype("You look upwards. The night sky is scattered with white stars, some dim, some bright.")
 
-  waittype("You look around. You can barely see anything because ")
+  waittype("The wind outside hits you like a jet of icy water. You shiver and move the blanket draped around your neck to cover as much of your body as possible.")
+
+  waittype("You look around, but you can barely see anything. The only light sources come from the moon, hovering in the sky, and the stars, scattered across the night sky.")
+
   tempEnd()

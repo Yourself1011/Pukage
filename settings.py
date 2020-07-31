@@ -1,3 +1,10 @@
+"""
+Pukage
+Choose-your-own-adventure game.
+Copyright 2020 Daniel Zhang, Jeffery Zang, Li Feng Yin
+MIT License
+"""
+
 from subprocess import call
 import os
 from time import sleep

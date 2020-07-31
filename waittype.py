@@ -1,3 +1,10 @@
+"""
+Pukage
+Choose-your-own-adventure game.
+Copyright 2020 Daniel Zhang, Jeffery Zang, Li Feng Yin
+MIT License
+"""
+
 from scrolltype import scrolltype
 from time import sleep
 
