@@ -1,0 +1,92 @@
+intro - investigate, lights
+
+
+
+
+
+investigate - watch, lights
+
+
+
+
+  watch - hide, lights2, findWeapon
+
+
+
+    hide - lightsThree, searchDrawers, follow
+    
+      lightsThree - endOfChapterOne
+
+      searchDrawers - follow, lightsThree
+        follow - endOfChapterOne
+        lightsThree - endOfChapterOne
+
+      follow - endOfChapterOne
+
+
+    lights2 - hide, findWeapon, lightsOn
+      hide - lightsThree, searchDrawers, follow
+        lightsThree - endOfChapterOne
+        searchDrawers - endOfChapterOne
+        follow - endOfChapterOne
+
+
+    findWeapon - continueWithFlashlight, keepSearching
+      continueWithFlashlight - hide2, stay, searchWardrobe
+        hide2 - searchWardrobe2, follow, lightsThree
+          searchWardrobe2 - follow, lightsThree
+            follow - endOfChapterOne
+            lightsThree - endOfChapterOne
+        stay - follow, searchDrawers
+            follow - endOfChapterOne
+            searchDrawers - follow, lightsThree
+              follow - endOfChapterOne
+              lightsThree - endOfChapterOne
+          searchWardrobe - 
+        keepSearching - hide2, stay, searchWardrobe
+          hide2 - 
+          stay - 
+          searchWardrobe - 
+      lightsOn - 
+    findWeapon - continueWithFlashlight, keepSearching
+      continueWithFlashlight - hide2, stay, searchWardrobe
+        hide2 - 
+        stay - 
+        searchWardrobe - 
+      keepSearching - hide2, stay, searchWardrobe
+        hide2 - 
+        stay - 
+        searchWardrobe - 
+
+  lights - findWeapon, hide, talk
+    findWeapon - continueWithFlashlight, keepSearching
+      continueWithFlashlight - hide2, stay, searchWardrobe
+        hide2 - 
+        stay - 
+        searchWardrobe - 
+      keepSearching - hide2, stay, searchWardrobe
+        hide2 - 
+        stay - 
+        searchWardrobe -
+    hide - lightsThree, searchDrawers, follow
+      lightsThree - 
+      searchDrawers -
+      follow - 
+    talk - 
+
+lights - findWeapon, hide, talk
+    findWeapon - continueWithFlashlight, keepSearching
+      continueWithFlashlight - hide2, stay, searchWardrobe
+        hide2 - 
+        stay - 
+        searchWardrobe - 
+      keepSearching - hide2, stay, searchWardrobe
+        hide2 - 
+        stay - 
+        searchWardrobe -
+    hide - lightsThree, searchDrawers, follow
+      lightsThree - 
+      searchDrawers -
+      follow - 
+    talk - 
+    
