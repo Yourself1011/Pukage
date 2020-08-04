@@ -1,7 +1,7 @@
 """
 Pukage
 Choose-your-own-adventure game.
-Copyright 2020 Daniel Zhang, Jeffery Zang, Li Feng Yin
+Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng Yin
 MIT License
 """
 

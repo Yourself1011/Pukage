@@ -1,5 +1,11 @@
-# pukage
-So, what is pukage?
-It's a python game sort of like the purge. It's like a choose-your-own-adventure game.
+# Welcome to Pukage.
 
-It is currently in alpha, and doesn't have much content, but stay tuned for more!
+Pukage is an indie story game created by 3 teenagers and a repl.
+
+This game is about a world that has gone into an apocalyptic state.
+
+Pukage is still in alpha development, so expect a few bugs. If you experience any bugs, or have any suggestions, please go to [issues](https://github.com/Yourself1011/Pukage/issues "Cool you're reading this")
+
+Thanks for playing Pukage! Have a good day.
+
+-- The Devs

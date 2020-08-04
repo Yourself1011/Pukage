@@ -1,8 +1,9 @@
 """
 Pukage
 Choose-your-own-adventure game.
-Copyright 2020 Daniel Zhang, Jeffery Zang, Li Feng Yin
+Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng Yin
 MIT License
+
 """
 
 from random import randint
@@ -16,24 +17,94 @@ from settings import gameSettings
 import readchar.readchar
 import readchar.key
 from typing import List, Any
-from os import system, name
+from os import system, name, path
 import threading
 import sys
+
+
+stats = {
+    "health": 100,
+    "hunger": 100,
+    "energy": 100
+}
+
+difficultyFactor = 1
+
+
+def commitDie():
+    createMenu("You have lost all of your health wile playing and died. Thank you for playing. This game is still is alpha development, so there may be bugs. We encourage you to keep trying until you complete Pukage.",
+		["Retry", "See the credits", "Quit to menu", "Quit"],
+		[intro, credits, startingMenu, "sys.exit(\"You exited the game.\")"]
+	)
+    
+
+def gotHurt(amountLost):
+    stats["health"] -= amountLost * difficultyFactor
+    if stats["health"] <= 0:
+        commitDie()
+    elif stats["health"] <= 10:
+        scrollType("Your limbs are broken.")
+    elif stats["health"] <= 25:
+        scrollType("You have scratches, bruises, and cuts all over your body")
+    elif stats["health"] <= 50:
+        scrollType("You are at half health.")
+
+
+def gotTired(amountLost = 3):
+    stats["energy"] -= amountLost * difficultyFactor
+    if stats["energy"] <= 10:
+        scrollType("You are very tired. You must find somewhere to sleep.")
+    elif stats["energy"] <= 25:
+        scrollType("You are more tired now. You should find somewhere to rest soon.")
+    elif stats["energy"] <= 50:
+        scrollType("You are getting tired, but not too much.")
+
+
+def gotHungry(amountLost = 2):
+    stats["hunger"] -= amountLost * difficultyFactor
+    if stats["hunger"] <= 0:
+        scrollType("You are starving, and beginning to lose health. Eat to prevent extra health loss, or you will die.")
+        gotHurt(5)
+    elif stats["hunger"] <= 10:
+        scrollType("You are extremely hungry. Eat food soon.")
+    elif stats["hunger"] <= 25:
+        scrollType("Your stomach is rumbling")
+    elif stats["hunger"] <= 50:
+        scrollType("You are beginning to get hungry")
+
+
+def showStats():
+    bars = []
+    for i in range(3):
+        thisBar = []
+        for j in range(round(list(stats.values())[i] / 10)):
+            thisBar.append("■")
+        for k in range(10 - round(list(stats.values())[i] / 10)):
+            thisBar.append("□")
+        bars.append("".join(thisBar)) 
+    output = "Health:      Hunger:      Energy:\n" + " | ".join(bars)
+    return output
 
 
 def sleep(time):
     timeSleep(time * WaitType.waitTime)
 
 
-def options(options, functions):
+def options(options: List[Any], functions: List[Any]):
   scrollType("What do you do?\n")
 
   sleep(1)
+
+  if path.basename(__file__) == "chapter2" or difficultyFactor >= 2:
+      gotHurt(0)
+      gotHungry()
+      gotTired()
 
   createMenu(
         "\n".join(scrolltype.log),
         options,
         functions,
+        footertext = showStats(),
   )
 
 
@@ -50,17 +121,14 @@ def intro():
     waittype("Your eyes peek open slowly after a long, deep sleep.")
 
     waittype(
-        "Your room is cold and dark, and your thin blankets provide minimal warmth."
+        "Your room is cold, and dark, and your thin blankets provide minimal warmth."
     )
 
     waittype(
         "You rummage around for the lights when suddenly you hear something outside."
     )
 
-    scrollType("What do you do?\n")
-
-    createMenu(
-        "\n".join(scrolltype.log),
+    options(
         ["Investigate", "Look for the lights"],
         [investigate, lights],
     )
@@ -69,10 +137,12 @@ def intro():
 decodeDict = {
     readchar.key.UP: "UP",
     readchar.key.DOWN: "DOWN",
-    readchar.key.ENTER: "ENTER"
+    readchar.key.ENTER: "ENTER",
+    readchar.key.ESC: "ESC",
+    readchar.key.RIGHT: "RIGHT",
+    readchar.key.LEFT: "LEFT",
+    readchar.key.BACKSPACE: "BACK"
 }
-
-item = ""
 
 
 def tempEnd():
@@ -173,8 +243,7 @@ def hide():
         "He looks for a few seconds, then starts rummaging in the drawers. Not finding anything, he turns around swiftly and leaves. You can tell that he is quite dangerous."
     )
 
-    createMenu(
-        "\n".join(scrolltype.log),
+    options(
         ["Look for the lights", "Search the drawers", "Follow the man"],
         [lightsThree, searchDrawers, follow],
     )
@@ -203,10 +272,7 @@ def lightsTwo(manInsideHouse=False):
         "After a long search, you finally find the lights, but you hear the man's footsteps starting to climb up the stairs. You're sure that he will notice if the lights turn on."
     )
 
-    scrollType("What do you do?")
-
-    createMenu(
-        "\n".join(scrolltype.log),
+    options(
         ["Hide", "Try to find a weapon", "Turn on the lights"],
         [hide, findWeapon, lightsOn],
     )
@@ -225,8 +291,7 @@ def lightsOn():
         "The staircase steps creak as the man climbs them. You don't know what this man wants, but you are paralysed with fear as you try to decide what to do, and wonder why the lights don't work."
     )
 
-    createMenu(
-        "\n".join(scrolltype.log),
+    options(
         ["Look for a flashlight in the drawers", "Look around for hiding places"],
         [findWeapon, closet]
     )
@@ -304,8 +369,7 @@ def findWeapon():
         "You hear the man walking up the stairs. The steps creak as he walks closer and closer to the top of the stairs."
     )
 
-    createMenu(
-        "\n".join(scrolltype.log),
+    options(
         ["Grab the flashlight", "Keep searching"],
         [continueWithFlashlight, keepSearching],
     )
@@ -334,9 +398,9 @@ def continueWithFlashlight():
         "You shine the flashlight around the room once more, spotting a wardrobe. Although it could contain useful tools and could be used as a hiding place, you think its risky to walk over there."
     )
 
-    scrollType("What do you do?")
+    
 
-    createMenu("\n".join(scrolltype.log), ["Hide under the bed quickly", "Stay where you are", "Search the wardrobe"], [hide2, stay, searchWardrobe])
+    options(["Hide under the bed quickly", "Stay where you are", "Search the wardrobe"], [hide2, stay, searchWardrobe])
 
 
 def keepSearching():
@@ -363,9 +427,9 @@ def keepSearching():
         "You spot a wardrobe in the corner of the room. But the man is now completely silent except for his footsteps, moving quicker and closer towards your bedroom door."
     )
 
-    scrollType("What do you do?")
+    
 
-    createMenu("\n".join(scrolltype.log), ["Hide under the bed", "Stay where you are", "Search the wardrobe"], [hide2, stay, searchWardrobe])
+    options(["Hide under the bed", "Stay where you are", "Search the wardrobe"], [hide2, stay, searchWardrobe])
 
 
 def hide2():
@@ -395,9 +459,9 @@ def hide2():
         "He opens one of the drawers and rummages inside. He goes to the dresser and does the same. Finding nothing, he slowly turns around and leaves."
     )
 
-    scrollType("What do you do?")
+    
 
-    createMenu("\n".join(scrolltype.log), ["Search the wardrobe", "Follow the man", "Turn on the lights"], [searchWardrobe2, follow, lightsThree])
+    options(["Search the wardrobe", "Follow the man", "Turn on the lights"], [searchWardrobe2, follow, lightsThree])
 
 
 def searchWardrobe2():
@@ -422,7 +486,7 @@ def searchWardrobe2():
 
     inv.add(item)
 
-    options(["Follow the man", "Look for the lights"], follow, lightsThree)
+    options(["Follow the man", "Look for the lights"], [follow, lightsThree])
 
 
 def searchWardrobe():
@@ -456,9 +520,9 @@ def searchWardrobe():
             + " and runs out of the room. You hear him stomp down the stairs and leave."
         )
         
-    scrollType("What do you do?")
+    
 
-    createMenu("\n".join(scrolltype.log), ["Follow the man", "Search the drawers"], [follow, searchDrawers])
+    options(["Follow the man", "Search the drawers"], [follow, searchDrawers])
 
 
 def stay():
@@ -490,9 +554,9 @@ def stay():
         "He also searches the nightstand and the dresser. Finding nothing but a few batteries, he turns around and leaves the room without glancing back at you."
     )
 
-    scrollType("What do you do?")
+    
 
-    createMenu("\n".join(scrolltype.log), ["Follow the man", "Search the drawers"], [follow, searchDrawers])
+    options(["Follow the man", "Search the drawers"], [follow, searchDrawers])
 
 
 def searchDrawers():
@@ -513,7 +577,7 @@ def searchDrawers():
 
     inv.add(item)
 
-    createMenu("\n".join(scrolltype.log), ["Follow the man", "Look for the lights"], [follow, lightsThree])
+    options(["Follow the man", "Look for the lights"], [follow, lightsThree])
 
 
 def follow():
@@ -561,26 +625,99 @@ def lightsThree():
     
     endThing = "not following man"
 
-    eval("endOfChapterOne(not following man)")
+    eval(endOfChapterOne("not following man"))
 
 
 def endOfChapterOne(endThing):
-    """the end of chapter one"""
-    waittype("To be continued in Chapter 2")
+	"""the end of chapter one"""
 
-    waittype("Thank you for playing Chapter 1 of Pukage. This game is currently in pre-alpha, so there may be bugs.")
+	from chapter2 import Chapter2intro
 
-    from chapter2 import Chapter2intro
-
-    createMenu("\n".join(scrolltype.log), ["Continue to chapter 2", "Quit", "Retry", "Quit to main menu", "Show credits"], ["Chapter2intro(endThing)", "sys.exit(\"You exited the game.\")", intro, startingMenu, credits])
+	Chapter2intro(endThing)
+	
 
 def credits():
-    """Shows the credits for pukage"""
-    createMenu(
-        "   _____              _ _ _       \n  / ____|            | (_) |      \n | |     _ __ ___  __| |_| |_ ___ \n | |    | '__/ _ \/ _` | | __/ __|\n | |____| | |  __/ (_| | | |_\__ \\\n  \_____|_|  \___|\__,_|_|\__|___/ \n\n Developers: \n  1. Jeffrey Zang (age 13, Windows 10) \n  2. Li Feng Yin (age 12, Macbook) \n  3. Daniel Zhang (age 12, Chromebook) \n\nTesters: \n  1. The Devs \n  2. Other people soon" ,
-        ["Back"],
-        [startingMenu],
-    )
+	"""Shows the credits for pukage"""
+	createMenu(
+			"   _____              _ _ _       \n  / ____|            | (_) |      \n | |     _ __ ___  __| |_| |_ ___ \n | |    | '__/ _ \/ _` | | __/ __|\n | |____| | |  __/ (_| | | |_\__ \\\n  \_____|_|  \___|\__,_|_|\__|___/ \n\n Developers: ",
+			["  1. Jeffrey Zang", "  2. Li Feng Yin", "  3. Daniel Zhang", "\nBack"],
+			[jeffInfo, liFengInfo, danInfo, startingMenu],
+			"Testers: \n	1. The Devs \n	2. yogogiddap	\n	3. Cookie's Older Brother \n	4. MIDNIGHT aka XxMoonlightxX9872"
+			)
+		
+
+def jeffInfo():
+	createMenu("Jeffrey's Contacts: \n\n	Email: zangj4548@wrdsb.ca \n	Discord: Larg Ank#4494 \n    Repl: @LargAnk	",
+	["Back"],
+	[credits])
+
+
+def danInfo():
+	createMenu("Daniel's Contacts: \n\n	Email: d.zhang200788@gmail.com \n	Discord: Yourself#3987 \n    Repl: @DanielZhang3	",
+	["Back"],
+	[credits])
+
+
+def liFengInfo():
+	createMenu("Li Feng's Contacts: \n\n	Email: yinl8409@wrdsb.ca \n	Discord: Cookie's Owner#6343 \n    Repl: @LiFengFeng	",
+	["Back"],
+	[credits])
+
+def scrollMenu(headerText, menuTitles: List[Any], menuDescriptions: List[Any], functions: List[Any], footerText):
+    """Like createMenu(), but is side to side, not up and down"""
+    index = 0
+    print(scrollReload(headerText, menuTitles, menuDescriptions, index, footerText))
+
+    while True:
+        c = readchar.readkey()
+
+        if c in decodeDict:
+
+            if "{}".format(decodeDict[c]) == "LEFT":
+                if index != 0:
+                    index -= 1
+                    print(scrollReload(headerText, menuTitles, menuDescriptions, index, footerText))
+                else:
+                    index = int(len(menuTitles) - 1)
+                    print(scrollReload(headerText, menuTitles, menuDescriptions, index, footerText))
+
+            elif "{}".format(decodeDict[c]) == "RIGHT":
+                if index != int(len(menuTitles) - 1):
+                    index += 1
+                    print(scrollReload(headerText, menuTitles, menuDescriptions, index, footerText))
+                else:
+                    index = 0
+                    print(scrollReload(headerText, menuTitles, menuDescriptions, index, footerText))
+
+            elif "{}".format(decodeDict[c]) == "BACK":
+                settings()
+
+            elif "{}".format(decodeDict[c]) == "ENTER":
+                clearConsole()
+                if type(functions[index]) == str:
+                    try:
+                            eval(functions[index])
+                    except SyntaxError:
+                            exec(functions[index])
+                    break
+                elif type(functions[index]) == list:
+                    for func in functions[index]:
+                        if type(func) == str:
+                            try:
+                                eval(func)
+                            except SyntaxError:
+                                exec(func)
+                            break
+                        else:
+                            func()
+                else:
+                    functions[index]()
+
+
+def scrollReload(headerText, menuTitles: List[Any], menuDescriptions: List[Any], index, footerText):
+    clearConsole()
+    title = "◀   " + menuTitles[index] + "   ▶"
+    return headerText + "\n\n" + title + "\n\n" + menuDescriptions[index] + "\n\n" + footerText
 
 
 def createMenu(
@@ -634,12 +771,13 @@ def createMenu(
                     break
                 elif type(functions[index]) == list:
                     for func in functions[index]:
-                        if type(functions[index] == str):
+                        if type(func) == str:
                             try:
-                                    eval(func)
+                                eval(func)
                             except SyntaxError:
-                                    exec(func)
+                                exec(func)
                             break
+                        else:
                             func()
                 else:
                     functions[index]()
@@ -674,7 +812,7 @@ def startingMenu():
         "  _____       _                    \n |  __ \     | |                   \n | |__) _   _| | ____ _  __ _  ___ \n |  ___| | | | |/ / _` |/ _` |/ _ \\\n | |   | |_| |   | (_| | (_| |  __/\n |_|    \__,_|_|\_\__,_|\__, |\___|\n                         __/ |     \n                        |___/      ",
         ["Start game", "Settings", "Credits", "Exit game"],
         [intro, settings, credits, "sys.exit(\"You exited the game.\")"],
-        "v1.0.0-alpha",
+        version,
     )
 
 
@@ -719,7 +857,7 @@ def setScrollSpeed():
             userInputInt = int(userInput)
 
             if userInputInt <= 10 and userInputInt >= 0:
-                scrolltype.scrollSpeed = userInputInt / 50
+                scrolltype.scrollSpeed = userInputInt / 100
                 break
             else:
                 clearConsole()
@@ -765,17 +903,21 @@ def setWaitTime():
 
 def setDifficulty():
     """sets the difficulty"""
+    global difficultyFactor
+    scrollMenu("  _____  _  __  __ _            _ _         \n |  __ \(_)/ _|/ _(_)          | | |        \n | |  | |_| |_| |_ _  ___ _   _| | |_ _   _ \n | |  | | |  _|  _| |/ __| | | | | __| | | |\n | |__| | | | | | | | (__| |_| | | |_| |_| |\n |_____/|_|_| |_| |_|\___|\__,_|_|\__|\__, |\n                                       __/ |\n                                      |___/ ", ["Invulnerable", "Easy", "Normal", "Hard", "Insane"], ["You cannot die or lose health. Basically, you win no matter what.", "Feeling casual? This is the mode for you. You lose stats half as fast as normal.", "Normal. For normal people. This is the normal mode. Very normal. Not much else to say.", "This mode is harder. It's pretty hard. Twice as hard as normal. You don't get the invulnerability at the beginning.", "What are you even doing?"], ["global difficultyFactor\ndifficultyFactor = 0", "global difficultyFactor\ndifficultyFactor = 0.5", "global difficultyFactor\ndifficultyFactor = 1", "global difficultyFactor\ndifficultyFactor = 2", "global difficultyFactor\ndifficultyFactor = 10"], "Press backspace to go back")
+    settings()
 
-    createMenu("Coming soon", ["Back"], [settings])
-	 #i don't need that for what i'm doing
 
 def settings():
     createMenu(
         "   _____      _   _   _                 \n  / ____|    | | | | (_)                \n | (___   ___| |_| |_ _ _ __   __ _ ___ \n  \___ \ / _ | __| __| | '_ \ / _` / __|\n  ____) |  __| |_| |_| | | | | (_| \__ \ \n |_____/ \___|\__|\__|_|_| |_|\__, |___/\n                               __/ |    \n                              |___/     ",
-        ["Scroll speed", "Wait time", "Difficulty", "\nBack"],
+        ["Typing Speed", "Wait Time", "Difficulty", "\nBack"],
         [setScrollSpeed, setWaitTime, setDifficulty, startingMenu],
-        "v1.0.0-beta",
+        version,
     )
+
+
+version = "v1.0.0-alpha"
 
 
 # def pause():
@@ -787,9 +929,41 @@ def settings():
 #             threading.Lock().acquire()
 #             createMenu("  _____                         _ \n |  __ \                       | |\n | |__) __ _ _   _ ___  ___  __| |\n |  ___/ _` | | | / __|/ _ \/ _` |\n | |  | (_| | |_| \__ |  __| (_| |\n |_|   \__,_|\__,_|___/\___|\__,_|                                  ", ["Resume Game", "Options", "Quit to title", "Quit"], ["threading.Lock().release()", settings, startingMenu, "sys.exit('You left the game.')"])
 
-# paws = threading.Thread(target=pause)
-# paws.start()
+# def readChar():
+#     global charList
+#     charList = [["ESC", pause], ["RIGHT", pause]]
+#     while True:
+#         c = readchar.readkey()
+#         if c in decodeDict:
+#             for i in charList.length:
+#                 if charList[i][0] == c:
+#                     charCheck = True
+#                     function = charList[i][1]
+#                     break
+#             if charCheck:
+
+#                 if type(function) == str:
+#                     try:
+#                             eval(function)
+#                     except SyntaxError:
+#                             exec(function)
+#                     break
+#                 elif type(function) == list:
+#                     for func in function:
+#                         if type(function == str):
+#                             try:
+#                                     eval(func)
+#                             except SyntaxError:
+#                                     exec(func)
+#                             break
+#                             func()
+#                 else:
+#                     function()
+
+
+# readChar = threading.Thread(target=readChar)
+# readChar.start()
 # mainThread = threading.main_thread()
+
 if __name__ == "__main__":
-    startingMenu()
-    
+		startingMenu()

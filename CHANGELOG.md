@@ -7,6 +7,14 @@
 -   [June 18](#June-18)
 -   [June 19](#June-19)
 -   [July 7](#July-7)
+-   [July 22](#July-22)
+-   [July 23](#July-23)
+-   [July 30](#July-24)
+-   [July 31](#July-25)
+-   [August 1](#August-1)
+-	[August 2](#August-2)
+-	[August 3](#August-3)
+-   [August 4](#August-4)
 
 #   2020
 
@@ -65,3 +73,41 @@
 - Jeffrey Zang - Created the `follow3` and `explore` functions
 - Jeffrey Zang - Created the `hide3`, `hide4` and `confrontTheMan` functions
 - Jeffrey Zang - Created the `lighthouse`, `backToHouse`, `restaurant`, and `bank` functions
+- Daniel Zhang - Made GitHub repository, added MIT licence.
+- Daniel Zhang - Added `README.md` file
+- Jeffrey Zang - Added the difficulty thing
+- Li Feng Yin - Made fresh tacos for all of us! <3
+
+## August 1 ## 
+- Jeffrey Zang - Fixed ALL the bugs in Pukage - We can now start doing Chapter 2
+- Jeffrey Zang - Add the `jeffInfo`, `danInfo`, and `liFengInfo` functions, which allows the user to see more info about the devs
+- Jeffrey Zang - Fixed a couple bugs that I made myself
+- Jeffrey Zang - Changed the wait time between lines from 0.5 to 0.3 because of popular player preference
+- Daniel Zhang - Began new key reading system
+- Daniel Zhang - Cleaned toothpaste off the ceiling
+
+## August 2 ##
+- Jeffrey Zang - Made way too many functions
+	- `tryingToGoIn`
+	-	`getIntoTrapdoorWithBoxes`
+	- `getIntoTrapdoorWithGenerator`
+	- `breakWindow`
+	- `enterThroughDoor`
+	- `searchBoxes`
+	- `exitThroughTrapdoor`
+	- `hide5`
+	- `pleaseDontHurtMeImJustExploring`
+	- `fight`
+- Jeffrey Zang - Finished some functions
+	- `hide3`
+	- `tryingToGoIn`
+	- `getIntoTrapdoorWithBoxes`
+	- `getIntoTrapdoorWithGenerator`
+- Daniel Zhang - Changed the scrollspeed from 0.1 to 0.05 because of popular player preference, and made the setting divide by 100 instead of 50
+- Daniel Zhang - Made the stats, hunger, energy, and health
+- Daniel Zhang - Made `gotTired`, `gotHungry`, `gotHurt`, and `commitDie` functions
+
+## August 3 ##
+- Daniel Zhang - Made difficulty settings and `scrollMenu()`
+- Luke Zhang - fix(CI): fix workflow syntax and steps (#2)
+- Luke Zhang - fix: make sure linter is passing #1

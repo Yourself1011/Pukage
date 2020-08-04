@@ -1,8 +1,8 @@
 [tool.poetry]
 name = "Pukage"
-version = "v1.0.0-beta"
-description = "Jeff put a description here. Wouldn't it be embarrasing if people saw this?"
-authors = ["Jeffry Zang <>", "Li Feng Yin <yinl8409@wrdsb.ca>", "Daniel Zhang <d.zhang200788@gmail.com>"]
+version = "v1.0.0-alpha"
+description = "Indie story game made by 3 teenagers and a repl"
+authors = ["Jeffrey Zang <zangj4548@wrdsb.ca>", "Li Feng Yin <yinl8409@wrdsb.ca>", "Daniel Zhang <d.zhang200788@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"

@@ -1,7 +1,7 @@
 """
 Pukage
 Choose-your-own-adventure game.
-Copyright 2020 Daniel Zhang, Jeffery Zang, Li Feng Yin
+Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng Yin
 MIT License
 """
 
@@ -9,7 +9,7 @@ from time import sleep
 from settings import gameSettings, terminalSize
 
 log = []
-scrollSpeed = 0.1
+scrollSpeed = 0.05
 
 
 def scrolltype(
