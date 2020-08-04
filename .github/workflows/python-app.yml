@@ -30,8 +30,9 @@ jobs:
 
   test:
     runs-on: ubuntu-latest
-
-    - uses: actions/checkout@v2
+    
+    steps:
+      - uses: actions/checkout@v2
       - name: Set up Python 3.8
         uses: actions/setup-python@v2
         with:
