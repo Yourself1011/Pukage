@@ -122,23 +122,22 @@ def addItem(item):
         else:
             inv.pockets.append(obj)
 
-def removeItem(item):
-  obj = itemsLibrary["removeArticles"](item)
 
-  try:
+def removeItem(item):
+    obj = itemsLibrary["removeArticles"](item)
+
+    try:
         obj = itemsLibrary[obj]
-  except KeyError:
+    except KeyError:
         return print("Oops, that item is not inside itemsLibrary. Go add it now.")
 
-  if obj.size == "big":
-      try:
-          inv.hands.pop(inv.hands.index())
-          return True
-      except ValueError:
-          return False
+    if obj.size == "big":
+        try:
+            inv.hands.pop(inv.hands.index())
+            return True
+        except ValueError:
+            return False
 
-  
-      
 
 def checkItem(item):
     obj = itemsLibrary["removeArticles"](item)
@@ -148,17 +147,17 @@ def checkItem(item):
     except KeyError:
         return print("Oops, that item is not inside itemsLibrary. Go add it now.")
 
-    if (obj.size == "nothing"):
-      return False
+    if obj.size == "nothing":
+        return False
 
     elif obj.size == "big":
         try:
             inv.hands[inv.hands.index(obj)]
-        except ValueError: 
+        except ValueError:
             return False
 
         return True
-    
+
     else:
         try:
             if inv.hands[inv.hands.index(obj)]:
@@ -171,7 +170,6 @@ def checkItem(item):
             return False
 
 
-
 class invClass:
     def add(self, item):
         return addItem(item)
@@ -181,12 +179,13 @@ class invClass:
 
     def find(self, item):
         return checkItem(item)
-    
+
     def has(self, item):
         return checkItem(item) != False
-      
+
     hands = []
     pockets = []
+
 
 inv = invClass()
 
