@@ -26,15 +26,13 @@ def sleep(time):
 
 
 def options(options, functions):
-  scrollType("What do you do?\n")
+    scrollType("What do you do?\n")
 
-  sleep(1)
+    sleep(1)
 
-  createMenu(
-        "\n".join(scrolltype.log),
-        options,
-        functions,
-  )
+    createMenu(
+        "\n".join(scrolltype.log), options, functions,
+    )
 
 
 def threeDots():
@@ -69,7 +67,7 @@ def intro():
 decodeDict = {
     readchar.key.UP: "UP",
     readchar.key.DOWN: "DOWN",
-    readchar.key.ENTER: "ENTER"
+    readchar.key.ENTER: "ENTER",
 }
 
 item = ""
@@ -98,8 +96,7 @@ def investigate():
     waittype("He starts to walk towards your house.")
 
     options(
-        ["Watch the man", "Look for the lights"],
-        [watch, lightsTwo],
+        ["Watch the man", "Look for the lights"], [watch, lightsTwo],
     )
 
 
@@ -122,8 +119,7 @@ def lights():
     )
 
     options(
-        ["Look for a flashlight", "Hide"],
-        [findWeapon, hide],
+        ["Look for a flashlight", "Hide"], [findWeapon, hide],
     )
 
 
@@ -188,7 +184,7 @@ def lightsTwo(manInsideHouse=False):
     waittype("You rummage around in search of the lights.")
 
     waittype("*rummage rummage rummage*")
-    
+
     if not manInsideHouse:
         waittype(
             "You hear a quiet creak noise. You're sure that the man you saw earlier just picked open the front door. You hear the man's footsteps travelling towards the stairs as you desperately search around for the light switch."
@@ -196,7 +192,7 @@ def lightsTwo(manInsideHouse=False):
 
     else:
         waittype(
-          "You hear the man inside the house. You hear his footsteps travelling towards the stairs as you start to get more and more desperate."
+            "You hear the man inside the house. You hear his footsteps travelling towards the stairs as you start to get more and more desperate."
         )
 
     waittype(
@@ -228,36 +224,57 @@ def lightsOn():
     createMenu(
         "\n".join(scrolltype.log),
         ["Look for a flashlight in the drawers", "Look around for hiding places"],
-        [findWeapon, closet]
+        [findWeapon, closet],
     )
+
 
 def closet():
     """Trying to hide and hiding in the closet"""
 
-    waittype("You look around the room, trying to find a hiding place. Your heart is pounding furiously inside your ribs as you hear the man approach the top of the stairs.")
+    waittype(
+        "You look around the room, trying to find a hiding place. Your heart is pounding furiously inside your ribs as you hear the man approach the top of the stairs."
+    )
 
-    waittype("You bump into a cold, metal doorknob. You think its the door to the hallway until you hear the man's footsteps coming from behind you.")
+    waittype(
+        "You bump into a cold, metal doorknob. You think its the door to the hallway until you hear the man's footsteps coming from behind you."
+    )
 
-    waittype("Realizing you can hide in the closet you just found, you open the door softly and stumble inside.")
+    waittype(
+        "Realizing you can hide in the closet you just found, you open the door softly and stumble inside."
+    )
 
     if randint(1, 2) == 1:
-        waittype("As you feel around the closet, something sharp touches your feet. Looking down to see what it was, you bump your head on the wall and let out a yelp.")
+        waittype(
+            "As you feel around the closet, something sharp touches your feet. Looking down to see what it was, you bump your head on the wall and let out a yelp."
+        )
 
-        waittype("You hear the man reach the top of the stairs. His footsteps are travelling faster than before. You hastily close the closet door and pray he didn't hear you.")
+        waittype(
+            "You hear the man reach the top of the stairs. His footsteps are travelling faster than before. You hastily close the closet door and pray he didn't hear you."
+        )
 
-        waittype("The closet is pitch-dark. You move your hands around the cold floor until you get pricked by the object, leaving a papercut on your finger. You grab it carefully around the handle.")
+        waittype(
+            "The closet is pitch-dark. You move your hands around the cold floor until you get pricked by the object, leaving a papercut on your finger. You grab it carefully around the handle."
+        )
 
         inv.add("small knife")
 
         waittype("You hear the door creak slowly as the man enters the room.")
 
-        waittype("The floor of the closet glows yellow as his footsteps move around the room slowly, heading towards the closet that you're hiding in.")
+        waittype(
+            "The floor of the closet glows yellow as his footsteps move around the room slowly, heading towards the closet that you're hiding in."
+        )
 
-        waittype("Suddenly, the man opens the closet door. You're blinded by yellow light as he shines a flashlight at you. You hear him jump backward in shock.")
+        waittype(
+            "Suddenly, the man opens the closet door. You're blinded by yellow light as he shines a flashlight at you. You hear him jump backward in shock."
+        )
 
-        waittype("He shines the flashlight away from you so he can see you. You see mostly green as your eyes try to recover from the brightness they were just exposed to, but you can see his sharp, concentrated face and a thin rifle on his back.")
+        waittype(
+            "He shines the flashlight away from you so he can see you. You see mostly green as your eyes try to recover from the brightness they were just exposed to, but you can see his sharp, concentrated face and a thin rifle on his back."
+        )
 
-        waittype("Suddenly, his eyes flash dangerously as he notices the knife in your hand. He withdraws a long knife from his pocket immediately and brings it to your neck. You're petrified in fright as he throws away the flashlight takes your knife from your hand.")
+        waittype(
+            "Suddenly, his eyes flash dangerously as he notices the knife in your hand. He withdraws a long knife from his pocket immediately and brings it to your neck. You're petrified in fright as he throws away the flashlight takes your knife from your hand."
+        )
 
         randomInt = randint(1, 4)
 
@@ -270,27 +287,44 @@ def closet():
         else:
             item = "nothing"
 
-        waittype("He grabs his flashlight, walks towards one of the drawers, and rummages through it, occassionally glancing at you. He does the same for the other dresser.")
+        waittype(
+            "He grabs his flashlight, walks towards one of the drawers, and rummages through it, occassionally glancing at you. He does the same for the other dresser."
+        )
 
         if randomInt == 4:
             waittype("Finding nothing, he turns around swiftly and leaves the room.")
 
         else:
-            waittype(f"Finding nothing but {item}, he turns around swiftly and leaves the room.")
-        
-        waittype("You spot a wardrobe that the man didn't look inside. As you walk out of the closet to look inside it, grateful that nothing bad had happened, you spot something shiny on the floor. As you walk forward to investigate, you realize it's the knife you found in the closet.")
+            waittype(
+                f"Finding nothing but {item}, he turns around swiftly and leaves the room."
+            )
+
+        waittype(
+            "You spot a wardrobe that the man didn't look inside. As you walk out of the closet to look inside it, grateful that nothing bad had happened, you spot something shiny on the floor. As you walk forward to investigate, you realize it's the knife you found in the closet."
+        )
 
         options(["Follow the man", "Try and turn on the lights", "Search the wardrobe"])
 
     else:
-        waittype("You close the door hastily right before the door creaks open and the man walks into the room. You catch a glimpse of him and notice a thin rifle strapped to his back.")
+        waittype(
+            "You close the door hastily right before the door creaks open and the man walks into the room. You catch a glimpse of him and notice a thin rifle strapped to his back."
+        )
 
-        waittype("The floor of the closet is illuminated in yellow light for a few seconds before it dims. You hear him rummage through the drawers and pray he doesn't look in the closet.")
+        waittype(
+            "The floor of the closet is illuminated in yellow light for a few seconds before it dims. You hear him rummage through the drawers and pray he doesn't look in the closet."
+        )
 
-        waittype("After what felt like an eternity, the door creaks again and the man leaves the room, closing the door behind him.")
+        waittype(
+            "After what felt like an eternity, the door creaks again and the man leaves the room, closing the door behind him."
+        )
 
-        options(["Follow the man", "Try and turn on the lights"], ["waittype(\"You open the closet door slowly, not daring to make a sound.\")\nfollow()", lightsThree])
-
+        options(
+            ["Follow the man", "Try and turn on the lights"],
+            [
+                'waittype("You open the closet door slowly, not daring to make a sound.")\nfollow()',
+                lightsThree,
+            ],
+        )
 
 
 def findWeapon():
@@ -336,7 +370,11 @@ def continueWithFlashlight():
 
     scrollType("What do you do?")
 
-    createMenu("\n".join(scrolltype.log), ["Hide under the bed quickly", "Stay where you are", "Search the wardrobe"], [hide2, stay, searchWardrobe])
+    createMenu(
+        "\n".join(scrolltype.log),
+        ["Hide under the bed quickly", "Stay where you are", "Search the wardrobe"],
+        [hide2, stay, searchWardrobe],
+    )
 
 
 def keepSearching():
@@ -365,7 +403,11 @@ def keepSearching():
 
     scrollType("What do you do?")
 
-    createMenu("\n".join(scrolltype.log), ["Hide under the bed", "Stay where you are", "Search the wardrobe"], [hide2, stay, searchWardrobe])
+    createMenu(
+        "\n".join(scrolltype.log),
+        ["Hide under the bed", "Stay where you are", "Search the wardrobe"],
+        [hide2, stay, searchWardrobe],
+    )
 
 
 def hide2():
@@ -397,7 +439,11 @@ def hide2():
 
     scrollType("What do you do?")
 
-    createMenu("\n".join(scrolltype.log), ["Search the wardrobe", "Follow the man", "Turn on the lights"], [searchWardrobe2, follow, lightsThree])
+    createMenu(
+        "\n".join(scrolltype.log),
+        ["Search the wardrobe", "Follow the man", "Turn on the lights"],
+        [searchWardrobe2, follow, lightsThree],
+    )
 
 
 def searchWardrobe2():
@@ -455,10 +501,14 @@ def searchWardrobe():
             + item
             + " and runs out of the room. You hear him stomp down the stairs and leave."
         )
-        
+
     scrollType("What do you do?")
 
-    createMenu("\n".join(scrolltype.log), ["Follow the man", "Search the drawers"], [follow, searchDrawers])
+    createMenu(
+        "\n".join(scrolltype.log),
+        ["Follow the man", "Search the drawers"],
+        [follow, searchDrawers],
+    )
 
 
 def stay():
@@ -492,7 +542,11 @@ def stay():
 
     scrollType("What do you do?")
 
-    createMenu("\n".join(scrolltype.log), ["Follow the man", "Search the drawers"], [follow, searchDrawers])
+    createMenu(
+        "\n".join(scrolltype.log),
+        ["Follow the man", "Search the drawers"],
+        [follow, searchDrawers],
+    )
 
 
 def searchDrawers():
@@ -513,7 +567,11 @@ def searchDrawers():
 
     inv.add(item)
 
-    createMenu("\n".join(scrolltype.log), ["Follow the man", "Look for the lights"], [follow, lightsThree])
+    createMenu(
+        "\n".join(scrolltype.log),
+        ["Follow the man", "Look for the lights"],
+        [follow, lightsThree],
+    )
 
 
 def follow():
@@ -534,7 +592,9 @@ def follow():
         "You hear the man leave the house, closing the door noisily behind him. You quicken your pace as your feet thump down the steps."
     )
 
-    waittype("He pushes open the front door and runs away. You follow him into the darkness.")
+    waittype(
+        "He pushes open the front door and runs away. You follow him into the darkness."
+    )
 
     endThing = "following man"
 
@@ -547,18 +607,24 @@ def lightsThree():
 
     waittype("*rummage rummage rummage*")
 
-    waittype("You find the light switch and flick it on. You look around the room, surpised at how big it actually is.")
+    waittype(
+        "You find the light switch and flick it on. You look around the room, surpised at how big it actually is."
+    )
 
-    waittype("The wardrobe is open with nothing inside. There is a blanket on your bed, which you decide to take with you. You wrap it around your back like a robe..")
+    waittype(
+        "The wardrobe is open with nothing inside. There is a blanket on your bed, which you decide to take with you. You wrap it around your back like a robe.."
+    )
 
     inv.add("blanket")
 
-    waittype("You open the door to the hallway and walk down the stairs. The house is bare, no decorations or furniture anywhere.")
+    waittype(
+        "You open the door to the hallway and walk down the stairs. The house is bare, no decorations or furniture anywhere."
+    )
 
     waittype("You reach the front door. You grasp the doorknob and take a deep breath.")
-    
+
     waittype("You push open the door and step into the outside.")
-    
+
     endThing = "not following man"
 
     eval("endOfChapterOne(not following man)")
@@ -568,16 +634,29 @@ def endOfChapterOne(endThing):
     """the end of chapter one"""
     waittype("To be continued in Chapter 2")
 
-    waittype("Thank you for playing Chapter 1 of Pukage. This game is currently in pre-alpha, so there may be bugs.")
+    waittype(
+        "Thank you for playing Chapter 1 of Pukage. This game is currently in pre-alpha, so there may be bugs."
+    )
 
     from chapter2 import Chapter2intro
 
-    createMenu("\n".join(scrolltype.log), ["Continue to chapter 2", "Quit", "Retry", "Quit to main menu", "Show credits"], ["Chapter2intro(endThing)", "sys.exit(\"You exited the game.\")", intro, startingMenu, credits])
+    createMenu(
+        "\n".join(scrolltype.log),
+        ["Continue to chapter 2", "Quit", "Retry", "Quit to main menu", "Show credits"],
+        [
+            "Chapter2intro(endThing)",
+            'sys.exit("You exited the game.")',
+            intro,
+            startingMenu,
+            credits,
+        ],
+    )
+
 
 def credits():
     """Shows the credits for pukage"""
     createMenu(
-        "   _____              _ _ _       \n  / ____|            | (_) |      \n | |     _ __ ___  __| |_| |_ ___ \n | |    | '__/ _ \/ _` | | __/ __|\n | |____| | |  __/ (_| | | |_\__ \\\n  \_____|_|  \___|\__,_|_|\__|___/ \n\n Developers: \n  1. Jeffrey Zang (age 13, Windows 10) \n  2. Li Feng Yin (age 12, Macbook) \n  3. Daniel Zhang (age 12, Chromebook) \n\nTesters: \n  1. The Devs \n  2. Other people soon" ,
+        "   _____              _ _ _       \n  / ____|            | (_) |      \n | |     _ __ ___  __| |_| |_ ___ \n | |    | '__/ _ \/ _` | | __/ __|\n | |____| | |  __/ (_| | | |_\__ \\\n  \_____|_|  \___|\__,_|_|\__|___/ \n\n Developers: \n  1. Jeffrey Zang (age 13, Windows 10) \n  2. Li Feng Yin (age 12, Macbook) \n  3. Daniel Zhang (age 12, Chromebook) \n\nTesters: \n  1. The Devs \n  2. Other people soon",
         ["Back"],
         [startingMenu],
     )
@@ -628,21 +707,22 @@ def createMenu(
                     scrolltype.log = []
                 if type(functions[index]) == str:
                     try:
-                            eval(functions[index])
+                        eval(functions[index])
                     except SyntaxError:
-                            exec(functions[index])
+                        exec(functions[index])
                     break
                 elif type(functions[index]) == list:
                     for func in functions[index]:
                         if type(functions[index] == str):
                             try:
-                                    eval(func)
+                                eval(func)
                             except SyntaxError:
-                                    exec(func)
+                                exec(func)
                             break
                             func()
                 else:
                     functions[index]()
+
 
 def reload():
     """reloads"""
@@ -673,7 +753,7 @@ def startingMenu():
     createMenu(
         "  _____       _                    \n |  __ \     | |                   \n | |__) _   _| | ____ _  __ _  ___ \n |  ___| | | | |/ / _` |/ _` |/ _ \\\n | |   | |_| |   | (_| | (_| |  __/\n |_|    \__,_|_|\_\__,_|\__, |\___|\n                         __/ |     \n                        |___/      ",
         ["Start game", "Settings", "Credits", "Exit game"],
-        [intro, settings, credits, "sys.exit(\"You exited the game.\")"],
+        [intro, settings, credits, 'sys.exit("You exited the game.")'],
         "v1.0.0-alpha",
     )
 
@@ -702,10 +782,12 @@ def generate(choices: List[Any], numberOfChoices):
         "\n".join(scrolltype.log), menuItemsList, menuItemsFunctions, clear=False
     )
 
+
 # def generate(choices: List[Any]):
 #     global item
 #     item = choices[randint(0, len(choices) - 1)]
 #     return item;
+
 
 def setScrollSpeed():
     """sets the scroll speed"""
@@ -767,7 +849,10 @@ def setDifficulty():
     """sets the difficulty"""
 
     createMenu("Coming soon", ["Back"], [settings])
-	 #i don't need that for what i'm doing
+
+
+# i don't need that for what i'm doing
+
 
 def settings():
     createMenu(
@@ -792,4 +877,3 @@ def settings():
 # mainThread = threading.main_thread()
 if __name__ == "__main__":
     startingMenu()
-    

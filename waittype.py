@@ -11,8 +11,9 @@ from time import sleep
 
 waitTime = 0.5
 
+
 def waittype(string):
-    scrolltype(string);
+    scrolltype(string)
     time = len(string.split()) * waitTime
     scrolltype("\n\n\n\n")
     sleep(time)
