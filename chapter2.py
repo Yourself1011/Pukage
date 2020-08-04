@@ -18,6 +18,7 @@ import readchar.key
 from typing import List, Any
 from os import system, name
 from threading import Thread
+from options import options
 import sys
 
 
@@ -67,7 +68,7 @@ def follow2():
         "You wander around for a few more minutes, looking for the man. You see the faint outline of a lighthouse in the distance."
     )
 
-    waittpe(
+    waittype(
         "Suddenly, you see something moving in the corner of your eye. You turn towards it and see the man enter a building in the distance."
     )
 
