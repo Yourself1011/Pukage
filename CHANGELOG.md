@@ -14,7 +14,7 @@
 -   [August 1](#August-1)
 -	[August 2](#August-2)
 -	[August 3](#August-3)
--   [August 4](#August-4)
+-   [August 10](#August-10)
 
 #   2020
 
@@ -111,3 +111,13 @@
 - Daniel Zhang - Made difficulty settings and `scrollMenu()`
 - Luke Zhang - fix(CI): fix workflow syntax and steps (#2)
 - Luke Zhang - fix: make sure linter is passing #1
+- Jeffrey Zang - Changed the waitTime from 0.24 to 0.2 because of popular player preference
+
+## August 10 ##
+
+- Li Feng Yin - Fixed problems with circular imports between `main.py` and `chapter2.py`
+- Daniel Zhang - Made a fighting engine with his big big big big big big big big brain
+- Jeffrey Zang - Made a cow happen
+- Daniel Zhang - Actually fixed circular imports
+- Daniel Zhang - Added characters.
+- Daniel Zhang - Asked Jeffrey what is up with the odd changes.

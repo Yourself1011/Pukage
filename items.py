@@ -1,9 +1,13 @@
 """
 Pukage
 Choose-your-own-adventure game.
-Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng Yin
+https://github.com/Yourself1011/Pukage/
+
+Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng, and all Pukage contributors https://github.com/Yourself1011/Pukage/graphs/contributors/
+
 MIT License
 """
+
 
 def removeArticles(word):
     splitWord = list(word)
@@ -33,5 +37,5 @@ itemsLibrary = {
     "small knife": {"name": "small knife", "size": "small", "type": ["weapon"],},
     "tank of gasoline": {"name": "tank of gasoline", "size": "big", "type": ["fuel"]},
     "hairpin": {"name": "hairpin", "size": "small"},
-    "blanket": {"name": "blanket", "size": "large" }
+    "blanket": {"name": "blanket", "size": "large"},
 }

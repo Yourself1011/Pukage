@@ -1,12 +1,14 @@
 """
 Pukage
 Choose-your-own-adventure game.
-Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng Yin
+https://github.com/Yourself1011/Pukage/
+
+Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng, and all Pukage contributors https://github.com/Yourself1011/Pukage/graphs/contributors/
+
 MIT License
 """
 
 from time import sleep
-from settings import gameSettings, terminalSize
 
 log = []
 scrollSpeed = 0.05
@@ -20,10 +22,6 @@ def scrolltype(
         speed = scrollSpeed
     else:
         speed = time
-
-    if gameSettings["fastmode"] == "yes":
-        print(text)
-        return
 
     for letter in list(text):
         print(f"{letter}{sep}", end=end, flush=flush)
