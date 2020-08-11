@@ -114,7 +114,6 @@ def health(health, maxHealth):
 def sleep(time):
     timeSleep(time * WaitType.waitTime)
 
-
 def options(options: List[Any], functions: List[Any]):
 
     if path.basename(__file__) == "chapter2" or difficultyFactor >= 2:
@@ -1151,7 +1150,6 @@ def customCharacter():
     character = input().replace("break", "\n")
 
     settings()
-
 
 def settings():
     createMenu(

@@ -20,6 +20,7 @@ import readchar.key
 from typing import List, Any
 from os import system, name
 from threading import Thread
+from options import options
 import sys
 from main import (
     showStats,
@@ -484,13 +485,11 @@ def lighthouse():
     waittype("*walk walk walk*")
 
     waittype(
-        "You get closer to the lighthouse and notice some other buildings. One has a staircase that leads to the second floor. You also notice a dock, with sailboats, jetskis, and other big boats."
-    )
+        "You get closer to the lighthouse and notice some other buildings. One has a staircase that leads to the second floor. You also notice a dock, with sailboats, jetskis, and other big boats.")
 
     waittype(
         "You keep walking and notice that you have entered a small neighbourhood. The gate and fence around it has been compeletely demolished."
     )
-
     waittype(
         "You see large apartment buildings in the distance. The windows are shattered and the walls are crumbing. You see no sign of life."
     )
