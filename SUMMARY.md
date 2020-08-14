@@ -1,4 +1,5 @@
 # Table of contents
 
-* [Initial page](README.md)
+* [Pukage](README.md)
+* [Custom level editor](custom-level-editor.md)
 
