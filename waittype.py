@@ -15,7 +15,6 @@ from time import sleep
 waitTime = 0.2
 
 
-
 def waittype(string):
     scrolltype(string)
     time = len(string.split()) * waitTime

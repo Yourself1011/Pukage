@@ -9,22 +9,7 @@ MIT License
 """
 
 
-def removeArticles(word):
-    splitWord = list(word)
-
-    if word.startswith("a "):
-        splitWord = splitWord[slice(2, len(word))]
-    elif word.startswith("an "):
-        splitWord = splitWord[slice(3, len(word))]
-    elif word.startswith("some "):
-        splitWord = splitWord[slice(5, len(word))]
-    elif word.startswith("the "):
-        splitWord = splitWord[slice(4, len(word))]
-    return "".join(splitWord)
-
-
 itemsLibrary = {
-    "removeArticles": removeArticles,
     "nothing": {"name": "nothing", "size": "nothing"},
     "flashlight": {"name": "flashlight", "type": ["light"], "size": "small",},
     "bandage": {"name": "bandage", "type": ["heal"], "size": "small",},

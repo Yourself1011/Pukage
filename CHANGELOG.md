@@ -121,3 +121,13 @@
 - Daniel Zhang - Actually fixed circular imports
 - Daniel Zhang - Added characters.
 - Daniel Zhang - Asked Jeffrey what is up with the odd changes.
+
+## August 11 ##
+
+- Li Feng Yin - Moved `createMenu` to new file
+- Li Feng Yin - Started rewriting `inv.add`
+
+## August 12 ##
+
+- Daniel Zhang - Added a splash of colour to the otherwise bland terminal.
+- Jeffrey Zang - Gave up cause he was too stupid

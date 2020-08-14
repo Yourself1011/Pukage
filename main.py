@@ -8,7 +8,7 @@ Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng, and all Pukage contributors 
 MIT License
 """
 
-from random import randint
+from random import randint, uniform
 from time import sleep as timeSleep
 import scrolltype
 from scrolltype import scrolltype as scrollType
@@ -19,11 +19,19 @@ import readchar.readchar
 import readchar.key
 from typing import List, Any, Dict
 from os import system, name, path
+import inspect
 import threading
 import sys
 
-
-stats = {"health": 100, "hunger": 100, "energy": 100}
+stats = {
+    "health": 100,
+    "hunger": 100,
+    "energy": 100,
+    "attack": 50,
+    "critChance": 10,
+    "critMulti": 2,
+    "defense": 10,
+}
 
 difficultyFactor = 1
 
@@ -31,15 +39,18 @@ character = " O \n\\|/\n |\n/ \\"
 
 dead = False
 
+cursorColour = "\u001b[36m"
+
 
 def commitDie():
     from chapter2 import lastWords
+
     global dead
     dead = True
     scrollType(lastWords)
     createMenu(
-        scrolltype.log + 
-        "You have lost all of your health wile playing and died. Thank you for playing. This game is still is alpha development, so there may be bugs. We encourage you to keep trying until you complete Pukage.",
+        scrolltype.log
+        + "You have lost all of your health wile playing and died. Thank you for playing. This game is still is alpha development, so there may be bugs. We encourage you to keep trying until you complete Pukage.",
         ["Retry", "See the credits", "Quit to menu", "Quit"],
         [intro, credits, startingMenu, 'sys.exit("You exited the game.")'],
     )
@@ -84,28 +95,23 @@ def gotHungry(amountLost=2):
 
 def showStats():
     bars = []
+    barColours = ["\u001b[31m", "\u001b[33m", "\033[1;33;40m"]
     for i in range(3):
-        thisBar = []
+        thisBar = [barColours[i]]
         for j in range(round(list(stats.values())[i] / 10)):
             thisBar.append("■")
+        thisBar.append("\u001b[0m")
         for k in range(10 - round(list(stats.values())[i] / 10)):
             thisBar.append("□")
         bars.append("".join(thisBar))
-    output = "Health:      Hunger:      Energy:\n" + " | ".join(bars)
-
-    def showItems(invType):
-        if len(invType) == 0:
-            return "n/a"
-        return ", ".join(list(map(lambda item: item.name.capitalize()), invType))
-
-    output += f"\n\nInventory:\nHands: {showItems(inv.hands)}\nPockets: {showItems(inv.pockets)}"
-    return output
+    return "Health:      Hunger:      Energy:\n" + " | ".join(bars) + f"\n{inv.show()}"
 
 
 def health(health, maxHealth):
-    thisBar = []
+    thisBar = ["\u001b[31m"]
     for j in range(round(health / (maxHealth / 10))):
         thisBar.append("■")
+    thisBar.append("\u001b[0m")
     for k in range(round((maxHealth - health) / 10)):
         thisBar.append("□")
     return "".join(thisBar)
@@ -114,9 +120,14 @@ def health(health, maxHealth):
 def sleep(time):
     timeSleep(time * WaitType.waitTime)
 
+
 def options(options: List[Any], functions: List[Any]):
 
-    if path.basename(__file__) == "chapter2" or difficultyFactor >= 2:
+    frame = inspect.stack()[1]
+    module = inspect.getmodule(frame[0])
+    filename = module.__file__
+
+    if filename == "/home/runner/Pukage/chapter2.py" or difficultyFactor >= 2:
         gotHurt(0)
         gotHungry()
         gotTired()
@@ -132,12 +143,12 @@ def options(options: List[Any], functions: List[Any]):
 
 def threeDots():
     sleep(1)
-    scrollType("...", WaitType.waitTime)
+    scrollType("...", scrolltype.scrollSpeed)
     sleep(2)
 
 
 def fight(stats: Dict, oppStats: Dict, oppName, oppChar):
-    """oppStats needs health, maxDamage, critChance, critMulti"""
+    """oppStats needs health, maxDamage, critChance, critMulti, defense, escapeChance (more is better chance)"""
     global fightChoice
     characterArray = []
     displayCharacter = character
@@ -145,7 +156,11 @@ def fight(stats: Dict, oppStats: Dict, oppName, oppChar):
     message = ""
     oppMaxHealth = oppStats.copy()["health"]
 
-    if len(oppChar.split("\n")) > len(character.split("\n")):
+    print(displayCharacter)
+
+    sleep(10)
+
+    if len(oppChar.split("\n")) > len(displayCharacter.split("\n")):
         repeat = len(oppChar.split("\n"))
         while True:
             if len(displayCharacter.split("\n")) <= len(oppChar.split("\n")):
@@ -153,7 +168,7 @@ def fight(stats: Dict, oppStats: Dict, oppName, oppChar):
             else:
                 break
     else:
-        repeat = len(character.split("\n"))
+        repeat = len(displayCharacter.split("\n"))
         while True:
             if len(displayCharacter.split("\n")) >= len(oppChar.split("\n")):
                 oppChar += "\n"
@@ -163,9 +178,9 @@ def fight(stats: Dict, oppStats: Dict, oppName, oppChar):
     for i in range(repeat):
         characterArray.append(
             displayCharacter.split("\n")[i]
-            + u"\u2067"
+            + "\u2067"
             + oppChar.split("\n")[i]
-            + u"\u2069"
+            + "\u2069"
         )
 
     while oppStats["health"] > 0 and not dead:
@@ -182,28 +197,46 @@ def fight(stats: Dict, oppStats: Dict, oppName, oppChar):
 
         createMenu(
             f"{oppName}:\n{oppHealthBar}\n\n{characters}\n\nYou:\n{healthBar}\n{message}",
-            ["Attack", "Defend", "Use item"],
-            ["global fightChoice\nfightChoice = 'attack'", "global fightChoice\nfightChoice = 'defend'", "None"],
+            [
+                "\u001b[31mAttack\u001b[0m",
+                "\u001b[36mDefend\u001b[0m",
+                "Use item",
+                "Run away",
+            ],
+            [
+                "global fightChoice\nfightChoice = 'attack'",
+                "global fightChoice\nfightChoice = 'defend'",
+                "None",
+                "global fightChoice\nfightChoice = 'flee'",
+            ],
         )
 
-        crit = not bool(randint(0, 10))
+        crit = not bool(randint(0, stats["critChance"]))
         oppCrit = not bool(randint(0, oppStats["critChance"]))
 
-        critMulti = randint(125, 250)/100
+        critMulti = round(
+            uniform(stats["critMulti"] - 1, stats["critMulti"] + 1),
+            len(str(stats["critMulti"]).replace(".", "")),
+        )
+
+        oppCritMulti = round(
+            uniform(oppStats["critMulti"] - 1, oppStats["critMulti"] + 1),
+            len(str(oppStats["critMulti"]).replace(".", "")),
+        )
 
         critMsg = ""
         oppCritMsg = ""
 
         if crit:
-            dmg = randint(1, 50) * critMulti
+            dmg = randint(1, stats["attack"]) * critMulti
             critMsg = f" and landed a critical hit! {critMulti}x damage"
         else:
-            dmg = randint(1, 50)
+            dmg = randint(1, stats["attack"])
 
         if oppCrit:
-            oppDmg = randint(0, oppStats["maxDamage"]) * oppStats["critMulti"]
+            oppDmg = randint(0, oppStats["maxDamage"]) * oppCritMulti
 
-            oppCritMsg = f" and landed a critical hit! {critMulti}x damage"
+            oppCritMsg = f" and landed a critical hit! {oppCritMulti}x damage"
         else:
             oppDmg = randint(0, oppStats["maxDamage"])
 
@@ -213,15 +246,67 @@ def fight(stats: Dict, oppStats: Dict, oppName, oppChar):
 
             message = f"You attacked {oppName}{critMsg}. {oppName} lost {dmg} health.\n{oppName} attacked you{oppCritMsg}. You lost {oppDmg} health."
         elif fightChoice == "attack" and oppChoice == "defend":
-            gotHurt(dmg / 2)
 
-            message = f"You attacked {oppName}{critMsg}, but they defended, so you lost {dmg / 2} health."
+            if randint(0, oppStats["defense"]):
+                gotHurt(dmg / 2)
+
+                message = f"You attacked {oppName}{critMsg}, but they defended, so you lost {dmg / 2} health."
+
+            else:
+                oppStats["health"] -= dmg / 2
+
+                message = f"You attacked {oppName}{critMsg}, but they defended, but their defense failed, so {oppName} lost {dmg / 2} health."
         elif fightChoice == "defend" and oppChoice == "attack":
-            oppStats["health"] -= oppDmg / 2
 
-            message = f"{oppName} attacked you{critMsg}, but you defended, so {oppName} lost {oppDmg / 2} health."
+            if randint(0, stats["defense"]):
+                oppStats["health"] -= oppDmg / 2
+
+                message = f"{oppName} attacked you{critMsg}, but you defended, so {oppName} lost {oppDmg / 2} health."
+            else:
+                gotHurt(oppDmg / 2)
+
+                message = f"{oppName} attacked you{critMsg}, but you defended, but your defense failed, so you lost {oppDmg} health."
         elif fightChoice == "defend" and oppChoice == "defend":
             message = f"You and {oppName} both defended. Absolutely nothing happened"
+
+        elif fightChoice == "flee":
+
+            waittype(
+                f"You run away, as fast as you can, as you realize you are no match for {oppName}."
+            )
+            while True:
+                if not randint(0, oppStats["escapeChance"]):
+                    waittype(
+                        f"You flee succesfully, and {oppName} is nowhere to be seen"
+                    )
+                    break
+                else:
+                    oppCrit = not bool(randint(0, oppStats["critChance"]))
+
+                    oppCritMulti = round(
+                        uniform(oppStats["critMulti"] - 1, oppStats["critMulti"] + 1),
+                        len(str(oppStats["critMulti"]).replace(".", "")),
+                    )
+
+                    if oppCrit:
+                        oppDmg = randint(0, oppStats["maxDamage"]) * oppCritMulti
+
+                        oppCritMsg = (
+                            f" and landed a critical hit! {oppCritMulti}x damage"
+                        )
+                    else:
+                        oppDmg = randint(0, oppStats["maxDamage"])
+
+                    gotHurt(oppDmg)
+
+                    waittype(
+                        f"You run as fast as you can, but he catches up and hits you{critMsg}. You lost {oppDmg} health."
+                    )
+
+                sleep(1)
+
+            break
+
     if oppStats["health"] <= 0:
         clearConsole()
         waittype(f"{message}\nYou won the fight! {oppName} has now been defeated.")
@@ -230,6 +315,10 @@ def fight(stats: Dict, oppStats: Dict, oppName, oppChar):
 def intro():
     """Does the intro"""
     threeDots()
+
+    waittype(
+        "Note: the inv.add() function is being rewritten to incorporate the createMenu() function. Please take notice that there will be nothing in the inventory."
+    )
 
     waittype("Your eyes peek open slowly after a long, deep sleep.")
 
@@ -326,6 +415,38 @@ def watch():
     )
 
 
+def lightsTwo(*manInsideHouse):
+    """Looking for lights when the man is inside"""
+
+    if not manInsideHouse:
+        manInsideHouse = False
+
+    threeDots()
+
+    waittype("You rummage around in search of the lights.")
+
+    waittype("*rummage rummage rummage*")
+
+    if not manInsideHouse:
+        waittype(
+            "You hear a quiet creak noise. You're sure that the man you saw earlier just picked open the front door. You hear the man's footsteps travelling towards the stairs as you desperately search around for the light switch."
+        )
+
+    else:
+        waittype(
+            "You hear the man inside the house. You hear his footsteps travelling towards the stairs as you start to get more and more desperate."
+        )
+
+    waittype(
+        "After a long search, you finally find the lights, but you hear the man's footsteps starting to climb up the stairs. You're sure that he will notice if the lights turn on."
+    )
+
+    options(
+        ["Hide", "Try to find a weapon", "Turn on the lights"],
+        [hide, findWeapon, lightsOn],
+    )
+
+
 def hide():
     """Hiding from the man"""
 
@@ -356,35 +477,6 @@ def hide():
     options(
         ["Look for the lights", "Search the drawers", "Follow the man"],
         [lightsThree, searchDrawers, follow],
-    )
-
-
-def lightsTwo(manInsideHouse=False):
-    """Looking for lights when the man is inside"""
-
-    threeDots()
-
-    waittype("You rummage around in search of the lights.")
-
-    waittype("*rummage rummage rummage*")
-
-    if not manInsideHouse:
-        waittype(
-            "You hear a quiet creak noise. You're sure that the man you saw earlier just picked open the front door. You hear the man's footsteps travelling towards the stairs as you desperately search around for the light switch."
-        )
-
-    else:
-        waittype(
-            "You hear the man inside the house. You hear his footsteps travelling towards the stairs as you start to get more and more desperate."
-        )
-
-    waittype(
-        "After a long search, you finally find the lights, but you hear the man's footsteps starting to climb up the stairs. You're sure that he will notice if the lights turn on."
-    )
-
-    options(
-        ["Hide", "Try to find a weapon", "Turn on the lights"],
-        [hide, findWeapon, lightsOn],
     )
 
 
@@ -882,22 +974,22 @@ def scrollMenu(
                 clearConsole()
                 if type(functions[index]) == str:
                     try:
-                        eval(functions[index])
+                        return eval(functions[index])
                     except SyntaxError:
-                        exec(functions[index])
+                        return exec(functions[index])
                     break
                 elif type(functions[index]) == list:
                     for func in functions[index]:
                         if type(func) == str:
                             try:
-                                eval(func)
+                                return eval(func)
                             except SyntaxError:
-                                exec(func)
+                                return exec(func)
                             break
                         else:
-                            func()
+                            return func()
                 else:
-                    functions[index]()
+                    return functions[index]()
 
 
 def scrollReload(
@@ -914,6 +1006,17 @@ def scrollReload(
         + "\n\n"
         + footerText
     )
+
+
+decodeDict = {
+    readchar.key.UP: "UP",
+    readchar.key.DOWN: "DOWN",
+    readchar.key.ENTER: "ENTER",
+    readchar.key.ESC: "ESC",
+    readchar.key.RIGHT: "RIGHT",
+    readchar.key.LEFT: "LEFT",
+    readchar.key.BACKSPACE: "BACK",
+}
 
 
 def createMenu(
@@ -961,22 +1064,22 @@ def createMenu(
                     scrolltype.log = []
                 if type(functions[index]) == str:
                     try:
-                        eval(functions[index])
+                        return eval(functions[index])
                     except SyntaxError:
-                        exec(functions[index])
+                        return exec(functions[index])
                     break
                 elif type(functions[index]) == list:
                     for func in functions[index]:
                         if type(func) == str:
                             try:
-                                eval(func)
+                                return eval(func)
                             except SyntaxError:
-                                exec(func)
+                                return exec(func)
                             break
                         else:
-                            func()
+                            return func()
                 else:
-                    functions[index]()
+                    return functions[index]()
 
 
 def reload():
@@ -985,7 +1088,7 @@ def reload():
 
     menuItems = originalMenuItems.copy()
     indexVal = menuItems[index]
-    pointer = indexVal + " «"
+    pointer = indexVal + cursorColour + " «\u001b[0m"
 
     menuItems.pop(index)
     menuItems.insert(index, pointer)
@@ -1006,8 +1109,13 @@ def clearConsole():
 def startingMenu():
     """creates the starting menu"""
     createMenu(
-        "  _____       _                    \n |  __ \     | |                   \n | |__) _   _| | ____ _  __ _  ___ \n |  ___| | | | |/ / _` |/ _` |/ _ \\\n | |   | |_| |   | (_| | (_| |  __/\n |_|    \__,_|_|\_\__,_|\__, |\___|\n                         __/ |     \n                        |___/      ",
-        ["Start game", "Settings", "Credits", "Exit game"],
+        "\u001b[33m  _____       _                    \n |  __ \     | |                   \n | |__) _   _| | ____ _  __ _  ___ \n |  ___| | | | |/ / _` |/ _` |/ _ \\\n | |   | |_| |   | (_| | (_| |  __/\n |_|    \__,_|_|\_\__,_|\__, |\___|\n                         __/ |     \n                        |___/      \u001b[0m",
+        [
+            "\u001b[32mStart game\u001b[0m",
+            "\u001b[30;1mSettings\u001b[0m",
+            "\u001b[33;1mCredits\u001b[0m",
+            "\u001b[31mExit game\u001b[0m",
+        ],
         [intro, settings, credits, 'sys.exit("You exited the game.")'],
         version,
     )
@@ -1036,6 +1144,8 @@ def generate(choices: List[Any], numberOfChoices):
     createMenu(
         "\n".join(scrolltype.log), menuItemsList, menuItemsFunctions, clear=False
     )
+
+    scrolltype.log.append("")
 
 
 def setScrollSpeed():
@@ -1119,30 +1229,6 @@ def setDifficulty():
     settings()
 
 
-def setCharacter():
-    scrollMenu(
-        "   _____ _                          _            \n  / ____| |                        | |           \n | |    | |__   __ _ _ __ __ _  ___| |_ ___ _ __ \n | |    | '_ \ / _` | '__/ _` |/ __| __/ _ \ '__|\n | |____| | | | (_| | | | (_| | (__| ||  __/ |   \n  \_____|_| |_|\__,_|_|  \__,_|\___|\__\___|_|                                                                                                     ",
-        ["Default", "Small", "Punching", "Kicking", "Custom"],
-        [
-            " O \n\\|/\n |\n/ \\",
-            "옷",
-            "(Ò-Ó)\n  | oo\n  |//\n / \\",
-            "(Ò-Ó)\n \\|/\n  |̷--\n /",
-            'Make your custom character. Type "break" for line breaks.',
-        ],
-        [
-            "global character\ncharacter = ' O \\n\\\\|/\\n |\\n/ \\\\'",
-            "global character\ncharacter = '옷'",
-            "global character\ncharacter = '(Ò-Ó)\\n  | oo\\n  |//\\n / \\\\'",
-            "global character\ncharacter = '(Ò-Ó)\\n \\\\|/\\n  |̷--\\n /'",
-            customCharacter,
-        ],
-        f"Press backspace to go back\nCurrent character:\n{character}",
-    )
-
-    settings()
-
-
 def customCharacter():
     print('Type your character. Say "break" for line breaks')
 
@@ -1151,11 +1237,47 @@ def customCharacter():
 
     settings()
 
+
+def setCursorColour():
+    createMenu(
+        """   _____      _                      
+  / ____|    | |                     
+ | |     ___ | | ___  _   _ _ __ ___ 
+ | |    / _ \| |/ _ \| | | | '__/ __|
+ | |___| (_) | | (_) | |_| | |  \__ \ 
+  \_____\___/|_|\___/ \__,_|_|  |___/""",
+        [
+            "\u001b[30mBlack\u001b[0m",
+            "\u001b[31mRed\u001b[0m",
+            "\u001b[32mGreen\u001b[0m",
+            "\u001b[33mYellow\u001b[0m",
+            "\u001b[34mBlue\u001b[0m",
+            "\u001b[35mMagenta\u001b[0m",
+            "\u001b[36mCyan\u001b[0m",
+            "\u001b[37mWhite\u001b[0m",
+            "\nBack",
+        ],
+        [
+            "global cursorColour\ncursorColour = u'\\u001b[30m'",
+            "global cursorColour\ncursorColour = u'\\u001b[31'",
+            "global cursorColour\ncursorColour = u'\\u001b[32m'",
+            "global cursorColour\ncursorColour = u'\\u001b[33m'",
+            "global cursorColour\ncursorColour = u'\\u001b[34m'",
+            "global cursorColour\ncursorColour = u'\\u001b[35m'",
+            "global cursorColour\ncursorColour = u'\\u001b[36m'",
+            "global cursorColour\ncursorColour = u'\\u001b[37m'",
+            settings,
+        ],
+    )
+
+    settings()
+
+
 def settings():
     createMenu(
         "   _____      _   _   _                 \n  / ____|    | | | | (_)                \n | (___   ___| |_| |_ _ _ __   __ _ ___ \n  \___ \ / _ | __| __| | '_ \ / _` / __|\n  ____) |  __| |_| |_| | | | | (_| \__ \ \n |_____/ \___|\__|\__|_|_| |_|\__, |___/\n                               __/ |    \n                              |___/     ",
-        ["Typing Speed", "Wait Time", "Difficulty", "Character", "\nBack"],
-        [setScrollSpeed, setWaitTime, setDifficulty, setCharacter, startingMenu],
+        ["Typing Speed", "Wait Time", "Difficulty", "Cursor Colour", "\nBack",],
+        [setScrollSpeed, setWaitTime, setDifficulty, setCursorColour, startingMenu,],
         version,
     )
 

@@ -15,13 +15,13 @@ scrollSpeed = 0.05
 
 
 def scrolltype(
-    text, time: float = None, sep: str = "", end: str = "", flush: bool = True
+    text, waittime: float = None, sep: str = "", end: str = "", flush: bool = True
 ):
 
-    if time == None:
+    if waittime == None:
         speed = scrollSpeed
     else:
-        speed = time
+        speed = waittime
 
     for letter in list(text):
         print(f"{letter}{sep}", end=end, flush=flush)

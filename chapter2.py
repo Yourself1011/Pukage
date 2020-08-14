@@ -20,7 +20,6 @@ import readchar.key
 from typing import List, Any
 from os import system, name
 from threading import Thread
-from options import options
 import sys
 from main import (
     showStats,
@@ -32,7 +31,6 @@ from main import (
     tempEnd,
     options,
     clearConsole,
-    reload,
     fight,
     stats,
 )
@@ -224,13 +222,27 @@ def exitThroughTrapdoor():
             "Go in through the front door",
             "Break the front window",
             "Explore the city",
-        ][goBackInThroughTrapdoor, searchBoxes, breakWindow, explore]
+        ],
+        [goBackInThroughTrapdoor, searchBoxes, breakWindow, explore],
     )
 
 
 def goBackInThroughTrapdoor():
-    """going back in through the trapdoor"""
-    tempEnd()
+		"""going back in through the trapdoor"""
+		waittype("You climb back onto the boxes and go into the trapdoor. The lights are off and it is pitch black inside.")
+
+		options(
+			["Turn on the lights", "Leave"]
+			[lightsOn2, leaveRoom]
+		)
+
+
+def lightsOn2():
+	tempEnd()
+
+
+def leaveRoom():
+	tempEnd()
 
 
 def hide5():
@@ -289,12 +301,22 @@ def getIntoTrapdoorWithGenerator():
 
 def pleaseDontHurtMeImJustExploring():
     """saying pleaseDontHurtMeImJustExploring to the man"""
-    tempEnd()
+		waittype('The man grunts and pulls you off of the ground. ')
 
 
 def fightMan():
     """trying to fight the man"""
-    fight(stats, {"health": 50, "maxDamage": 10, "critChance": 25, "critMulti": 1.5}, "The man",  "0v0\n💪💪\n  ‖‖\n/ \\")
+    fight(
+        stats,
+        {
+            "health": 100,
+            "maxDamage": 25,
+            "critChance": 25,
+            "critMulti": 2,
+            "defense": 25,
+            "escapeChance": 2,
+        }
+    )
     tempEnd()
 
 
@@ -430,8 +452,12 @@ def hide4():
         waittype(
             "The hum returns, and you see the lights in the building come back on."
         )
-        waittype("Suddenly, you see the generator light up a brilliant blue. You see sparks spark out of it.")
-        waittype("Frozen in awe, you stay still, until you see something moving. Suddenly, a huge blue spider jumps out from behind the generator. You are in shock.")
+        waittype(
+            "Suddenly, you see the generator light up a brilliant blue. You see sparks spark out of it."
+        )
+        waittype(
+            "Frozen in awe, you stay still, until you see something moving. Suddenly, a huge blue spider jumps out from behind the generator. You are in shock."
+        )
         options(["Fight the spider", "Run", "Yell for help"])
 
     tempEnd()
@@ -485,7 +511,8 @@ def lighthouse():
     waittype("*walk walk walk*")
 
     waittype(
-        "You get closer to the lighthouse and notice some other buildings. One has a staircase that leads to the second floor. You also notice a dock, with sailboats, jetskis, and other big boats.")
+        "You get closer to the lighthouse and notice some other buildings. One has a staircase that leads to the second floor. You also notice a dock, with sailboats, jetskis, and other big boats."
+    )
 
     waittype(
         "You keep walking and notice that you have entered a small neighbourhood. The gate and fence around it has been compeletely demolished."
@@ -562,4 +589,4 @@ def leavingWithoutFollowingMan():
         "You start to take a small walk around the city. You notice that everything is eerily clean."
     )
 
-    tempEnd()
+    waittype("Suddenly, you hear a noise")
