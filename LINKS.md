@@ -1,5 +1,0 @@
-- [Run](https://Pukage.largank.repl.run)
-- [Repl](https://repl.it/@LargAnk/Pukage)
-- [gitHub Repo](https://github.com/Yourself1011/Pukage)
-- [Discord](https://discord.gg/qXH8hS8)
-- [Storyline](https://docs.google.com/drawings/d/1SV8xqHf6Y5Hy_Tr1d5_GEBDT9zPs8uPHfJ7rPVxQOQc/edit?usp=sharing)

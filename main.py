@@ -3,7 +3,7 @@ Pukage
 Choose-your-own-adventure game.
 https://github.com/Yourself1011/Pukage/
 
-Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng, and all Pukage contributors https://github.com/Yourself1011/Pukage/graphs/contributors/
+Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng Yin, and all Pukage contributors https://github.com/Yourself1011/Pukage/graphs/contributors/
 
 MIT License
 """
@@ -22,6 +22,7 @@ from os import system, name, path
 import inspect
 import threading
 import sys
+import levelEditor
 
 stats = {
     "health": 100,
@@ -67,6 +68,15 @@ def gotHurt(amountLost):
     elif stats["health"] <= 50:
         waittype("You are at half health.")
 
+    return amountLost * difficultyFactor
+
+
+def healed(amountHealed):
+	stats["health"] += amountHealed / difficultyFactor
+	waittype("You healed " + amountHealed / difficultyFactor + ".")
+	if stats["health"] >= 100:
+		stats["health"] = 100
+
 
 def gotTired(amountLost=3):
     stats["energy"] -= amountLost * difficultyFactor
@@ -78,13 +88,64 @@ def gotTired(amountLost=3):
         waittype("You are getting tired, but not too much.")
 
 
-def gotHungry(amountLost=2):
+def nightmareOver():
+	clearConsole()
+	waittype("Since you had a nightmare, you didn't as good of a night's sleep.")
+	stats["energy"] - 10 * difficultyFactor
+
+
+def slept(amountSlept):
+	stats["energy"] += amountSlept / difficultyFactor
+	waittype("You slept. You gained " + amountSlept / difficultyFactor + " energy while sleeping.")
+	if stats["health"] >= 100:
+		stats["health"] = 100
+	if amountSlept / difficultyFactor <= 25:
+		nightmareChance = randint(1,15)
+	if nightmareChance == 1 or nightmareChance == 2:
+		waittype("You are having a nightmare.")
+		waittype('(The Nightmare) We bought an old house, my boyfriend and I. He\'s in charge of the "new" construction – converting the kitchen in to the master bedroom for instance, while I\'m on wallpaper removal duty. The previous owner papered EVERY wall and CEILING! Removing it is brutal, but oddly satisfying. The best feeling is getting a long peel, similar to your skin when you\'re peeling from a sunburn. I don\'t know about you but I kinda make a game of peeling, on the hunt for the longest piece before it rips. Under a corner section of paper in every room is a person’s name and a date. Curiosity got the best of me one night when I Googled one of the names and discovered the person was actually a missing person, the missing date matching the date under the wallpaper! The next day, I made a list of all the names and dates. Sure enough each name was for a missing person with dates to match. We notified the police who naturally sent out the crime scene team. I overhead one tech say "yup, it\'s human." Human? What\'s human? "Ma\'am, where is the material you removed from the walls already? This isn\'t wallpaper you were removing."') 
+		nightmareOver()
+	if nightmareChance == 3 or nightmareChance == 4:
+		waittype("You are having a nightmare.")
+		waittype('(The Nightmare) I hate it when my brother Charlie has to go away. My parents constantly try to explain to me how sick he is. That I am lucky for having a brain where all the chemicals flow properly to their destinations like undammed rivers. When I complain about how bored I am without a little brother to play with, they try to make me feel bad by pointing out that his boredom likely far surpasses mine, considering his confine to a dark room in an institution. I always beg for them to give him one last chance. Of course, they did at first. Charlie has been back home several times, each shorter in duration than the last. Every time without fail, it all starts again. The neighbourhood cats with gouged out eyes showing up in his toy chest, my dad\'s razors found dropped on the baby slide in the park across the street, mom\'s vitamins replaced by bits of dishwasher tablets. My parents are hesitant now, using "last chances" sparingly. They say his disorder makes him charming, makes it easy for him to fake normalcy, and to trick the doctors who care for him into thinking he is ready for rehabilitation. That I will just have to put up with my boredom if it means staying safe from him. I hate it when Charlie has to go away. It makes me have to pretend to be good until he is back.')
+		nightmareOver()
+	if nightmareChance == 5 or nightmareChance == 6:
+		waittype("You are having a nightmare.")
+		waittype("(The Nightmare) He awoke to the huge, insect like creatures looming over his bed and screamed his lungs out. They hastily left the room and he stayed up all night, shaking and wondering if it had been a dream.The next morning, there was a tap on the door. Gathering his courage, he opened it to see one of them gently place a plate filled with fried breakfast on the floor, then retreat to a safe distance. Bewildered, he accepted the gift. The creatures chittered excitedly.This happened every day for weeks. At first he was worried they were fattening him up, but after a particularly greasy breakfast left him clutching his chest from heartburn, they were replaced with fresh fruit. As well as cooking, they poured hot steamy baths for him and even tucked him in when he went to bed. It was bizarre.One night, he awoke to gunshots and screaming. He raced downstairs to find a decapitated burglar being devoured by the insects. He was sickened, but disposed of the remains as best he could. He knew they had just been protecting him.One morning the creatures wouldn't let him leave his room. He lay down, confused but trusting as they ushered him back into bed. Whatever their motives, they weren't going to hurt him. Hours later a burning pain spread throughout his body. It felt like his stomach was filled with razor wire. The insects chittered as he spasmed and moaned. It was only when he felt a terrible squirming feeling beneath his skin that he realised the insects hadn't been protecting him. They had been protecting their young.")	
+		nightmareOver()
+	if nightmareChance == 7:
+		waittype("You are having a nightmare.")
+		waittype('(The Nightmare) Everyone loves the first day of school, right? New year, new classes, new friends. It\'s a day full of potential and hope, before all the dreary depressions of reality show up to ruin all the fun. I like the first day of school for a different reason, though. You see, I have a sort of power. When I look at people, I can...sense a sort of aura around them. A colored outline based on how long that person has to live. Most everyone I meet around my age is surrounded by a solid green hue, which means they have plenty of time left. A fair amount of them have a yellow-orangish tinge to their auras, which tends to mean a car crash or some other tragedy. Anything that takes people "before their time" as they say. The real fun is when the auras venture into the red end of the spectrum, though. Every now and again I\'ll see someone who\'s basically a walking stoplight. Those are the ones who get murdered or kill themselves. It\'s such a rush to see them and know their time is numbered. With that in mind, I always get to class very early so I can scout out my classmates\' fates. The first kid who walked in was basically radiating red. I chuckled to myself. Too damn bad, bro. But as people kept walking in, they all had the same intense glow. I finally caught a glimpse of my rose-tinted reflection in the window, but I was too stunned to move. Our professor stepped in and locked the door, his aura a sickening shade of green.')
+		nightmareOver()
+	if nightmareChance == 8:
+		waittype("You are having a nightmare.")
+		waittype('(The Nightmare) It has been said that the definition of insanity is "doing the same thing over and over and expecting different results". I understand the sentiment behind the saying, but it\'s wrong.I entered the building on a bet. I was strapped for cash and didn\'t buy into the old legends of the hotel to begin with, so fifty bucks was more than enough to get me do it. It was simple. Just reach the top floor, the 45th floor, shine my flashlight from a window.The hotel was old and broken, including the elevator, so that meant hiking up the stairs. So up the stairs I went. As I reached each platform, I noted the old brass plaques displaying the floor numbers. 15, 16, 17, 18. I felt a little tired as I crept higher, but so far, no ghosts, no cannibals, no demons. Piece of cake.I can\'t tell you how happy I was as I entered that last stretch of numbers. I joyfully counted them aloud at each platform. 40, 41, 42, 43, 44, 44. I stopped and looked back down the stairs. I must have miscounted, so I continued up. 44. One more flight. 44. And then down ten flights. 44. Fifteen flights. 44.And so it\'s been for as long as I can remember. So really, insanity isn\'t doing something repeatedly and expecting different results. It\'s knowing that the results will never ever change; that each door leads to the same staircase, to the same number. It’s realizing you no longer fall asleep. It\'s not knowing whether you\'ve been running for days or weeks or years. It\'s when the sobbing slowly turns into laughter.')
+		nightmareOver()
+	if nightmareChance == 9 or nightmareChance == 10:
+		waittype("You are having a nightmare.")
+		waittype('My daughter woke me around 11:50 last night. My wife and I had picked her up from her friend Sally\'s birthday party, brought her home, and put her to bed. My wife went into the bedroom to read while I fell asleep watching the Braves game."Daddy," she whispered, tugging my shirt sleeve. "Guess how old I\'m going to be next month.""I don\'t know, beauty," I said as I slipped on my glasses. "How old?"She smiled and held up four fingers.It is 7:30 now. My wife and I have been up with her for almost 8 hours. She still refuses to tell us where she got them.')
+		nightmareOver()
+	if nightmareChance == 11 or nightmareChance == 12:
+		waittype("You are having a nightmare.")
+		waittype('(The Nightmare) He had been given the watch on his tenth birthday. It was an ordinary grey plastic wristwatch in every respect except for the fact that it was counting down. "That is all of the time you have left in the world, son. Use it wisely." And indeed he did. As the watch ticked away, the boy, now a man, lived life to the fullest. He climbed mountains and swam oceans. He talked and laughed and lived and loved. The man was never afraid, for he knew exactly how much time he had left.Eventually, the watch began its final countdown. The old man stood looking over everything he had done, everything he had built. 5. He shook hands with his old business partner, the man who had long been his friend and confidant. 4. His dog came and licked his hand, earning a pat on the head for its companionship. 3. He hugged his son, knowing that he had been a good father. 2. He kissed his wife on the forehead one last time. 1. The old man smiled and closed his eyes. Then, nothing happened. The watch beeped once and turned off. The man stood standing there, very much alive. You would think that in that moment he would have been overjoyed. Instead, for the first time in his life, the man was scared.')
+		nightmareOver()
+	if nightmareChance == 13 or nightmareChance == 14:
+		waittype("You are having a nightmare.")
+		waittype('(The Nightmare) When my sister Betsy and I were kids, our family lived for awhile in a charming old farmhouse. We loved exploring its dusty corners and climbing the apple tree in the backyard. But our favorite thing was the ghost.We called her Mother, because she seemed so kind and nurturing. Some mornings Betsy and I would wake up, and on each of our nightstands, we\'d find a cup that hadn\'t been there the night before. Mother had left them there, worried that we\'d get thirsty during the night. She just wanted to take care of us.Among the house\'s original furnishings was an antique wooden chair, which we kept against the back wall of the living room. Whenever we were preoccupied, watching TV or playing a game, Mother would inch that chair forward, across the room, toward us. Sometimes she\'d manage to move it all the way to the center of the room. We always felt sad putting it back against the wall. Mother just wanted to be near us.Years later, long after we\'d moved out, I found an old newspaper article about the farmhouse\'s original occupant, a widow. She\'d murdered her two children by giving them each a cup of poisoned milk before bed. Then she\'d hanged herself.The article included a photo of the farmhouse\'s living room, with a woman\'s body hanging from a beam. Beneath her, knocked over, was that old wooden chair, placed exactly in the center of the room.')
+		nightmareOver()
+	if nightmareChance == 15:
+		waittype("You are having a nightmare.")
+		waittype('(The Nightmare) On Monday, I came up with the perfect plan. No one even knew we were friends.On Tuesday, he stole the gun from his dad.On Wednesday, we decided to make our move during the following day\'s pep rally.On Thursday, while the entire school was in the gym, we waited just outside the doors. I was to use the gun on whoever walked out first. Then he would take the gun and go into the gym blasting.I walked up to Mr. Quinn the guidance counselor and shot him in the face three times. He fell back into the gym, dead. The shots were deafening. We heard screams in the auditorium.No one could see us yet. I handed him the gun and whispered, "your turn." He ran into the gym and started firing. I followed a moment after.He hadn\'t hit anyone yet. Kids were scrambling and hiding. It was mayhem.I ran up behind him and tackled him. We struggled. I wrenched the gun out of his hands, turned it on him, and killed him. I closed his mouth forever. On Friday, I was anointed a hero. It was indeed the perfect plan.')
+		nightmareOver()
+
+
+def gotHungry(amountLost=0):
     stats["hunger"] -= amountLost * difficultyFactor
     if stats["hunger"] <= 0:
         waittype(
             "You are starving, and beginning to lose health. Eat to prevent extra health loss, or you will die."
         )
-        gotHurt(5)
+        gotHurt(5 * difficultyFactor)
     elif stats["hunger"] <= 10:
         waittype("You are extremely hungry. Eat food soon.")
     elif stats["hunger"] <= 25:
@@ -93,9 +154,16 @@ def gotHungry(amountLost=2):
         waittype("You are beginning to get hungry.")
 
 
+def ate(amountAte):
+	stats["hunger"] += amountAte / difficultyFactor
+	waittype("You ate. You gained " + amountAte / difficultyFactor + " hunger points.")
+	if stats["hunger"] >= 100:
+		stats["hunger"] = 100
+
+
 def showStats():
     bars = []
-    barColours = ["\u001b[31m", "\u001b[33m", "\033[1;33;40m"]
+    barColours = ["\u001b[31m", "\u001b[33m", "\033[93m"]
     for i in range(3):
         thisBar = [barColours[i]]
         for j in range(round(list(stats.values())[i] / 10)):
@@ -109,10 +177,11 @@ def showStats():
 
 def health(health, maxHealth):
     thisBar = ["\u001b[31m"]
-    for j in range(round(health / (maxHealth / 10))):
+    increment = round(maxHealth/10)
+    for j in range(round(health / increment)):
         thisBar.append("■")
     thisBar.append("\u001b[0m")
-    for k in range(round((maxHealth - health) / 10)):
+    for k in range(round((maxHealth / increment) - (health / increment))):
         thisBar.append("□")
     return "".join(thisBar)
 
@@ -121,16 +190,27 @@ def sleep(time):
     timeSleep(time * WaitType.waitTime)
 
 
-def options(options: List[Any], functions: List[Any]):
+def options(options: List[Any], functions: List[Any], *statsLost):
+    """Creates a story option"""
+
+    if (len(statsLost) > 3):
+        raise ValueError(f"There are only 3 stats. What are you thinking, passing in {len(statsLost)} stats?")
 
     frame = inspect.stack()[1]
     module = inspect.getmodule(frame[0])
+
     filename = module.__file__
 
     if filename == "/home/runner/Pukage/chapter2.py" or difficultyFactor >= 2:
-        gotHurt(0)
-        gotHungry()
-        gotTired()
+        if (statsLost):
+            statFunctions = ["gotHurt", "gotHungry", "gotTired"]
+            for i, stat in enumerate(statsLost):
+                eval(f"{statFunctions[i]}({stat})")
+                
+        else:
+            gotHurt(0)
+            gotHungry(1)
+            gotTired(99)
 
     scrollType("What do you do?\n")
 
@@ -311,7 +391,27 @@ def fight(stats: Dict, oppStats: Dict, oppName, oppChar):
         clearConsole()
         waittype(f"{message}\nYou won the fight! {oppName} has now been defeated.")
 
+decodeDict = {
+    readchar.key.UP: "UP",
+    readchar.key.DOWN: "DOWN",
+    readchar.key.ENTER: "ENTER",
+    readchar.key.ESC: "ESC",
+    readchar.key.RIGHT: "RIGHT",
+    readchar.key.LEFT: "LEFT",
+    readchar.key.BACKSPACE: "BACK",
+}
 
+
+def tempEnd():
+    """This is a temporary ending, please insert this at the end of any unfinished code during testing"""
+
+    waittype("Suddenly, you get a violent nosebleed and fall unconscious. The end.")
+
+    waittype("Also this is just a temporary ending so if you see this then congrats.")
+
+    waittype("ok bye")
+
+    
 def intro():
     """Does the intro"""
     threeDots()
@@ -333,27 +433,6 @@ def intro():
     options(
         ["Investigate", "Look for the lights"], [investigate, lights],
     )
-
-
-decodeDict = {
-    readchar.key.UP: "UP",
-    readchar.key.DOWN: "DOWN",
-    readchar.key.ENTER: "ENTER",
-    readchar.key.ESC: "ESC",
-    readchar.key.RIGHT: "RIGHT",
-    readchar.key.LEFT: "LEFT",
-    readchar.key.BACKSPACE: "BACK",
-}
-
-
-def tempEnd():
-    """This is a temporary ending, please insert this at the end of any unfinished code during testing"""
-
-    waittype("Suddenly, you get a violent nosebleed and fall unconscious. The end.")
-
-    waittype("Also this is just a temporary ending so if you see this then congrats.")
-
-    waittype("ok bye")
 
 
 def investigate():
@@ -544,7 +623,7 @@ def closet():
         )
 
         waittype(
-            "Suddenly, his eyes flash dangerously as he notices the knife in your hand. He withdraws a long knife from his pocket immediately and brings it to your neck. You're petrified in fright as he throws away the flashlight takes your knife from your hand."
+            "Suddenly, his eyes flash dangerously as he notices the knife in your hand. He withdraws a long knife from his pocket immediately and brings it to your neck. You're petrified in fright as he throws away the flashlight and takes your knife from your hand."
         )
 
         randomInt = randint(1, 4)
@@ -575,8 +654,12 @@ def closet():
         )
 
         options(
-            ["Follow the man", "Try and turn on the lights", "Search the wardrobe"]
-        )  # HEY HEY HEY WHAT'S THIS???
+            ["Follow the man", "Try and turn on the lights", "Search the wardrobe"],
+            [
+              follow, 
+              lightsThree, 
+              "waittype('You open the wardrobe and find nothing inside.')\noptions(['Follow the man', 'Try and turn on the lights'], [follow, lightsThree])"]
+        )
 
     else:
         waittype(
@@ -619,14 +702,17 @@ def findWeapon():
 
 def continueWithFlashlight():
     """Keep searching with the flashlight"""
+
     inv.add("flashlight")
     waittype(
         "You grab the flashlight and turn it on. You shine the light around and see a dresser next to the bed."
     )
 
     generate(
-        ["a water bottle", "nothing", "some batteries", "a sock", "an elastic band"], 3
+        ["a water bottle", "nothing", "some batteries", "a sock", "an elastic band"]
     )
+
+    print(item)
 
     waittype(
         "You run over to the dresser and pull it open, finding " + item + " inside."
@@ -637,7 +723,7 @@ def continueWithFlashlight():
     waittype("You close the drawer. You hear the man reach the top of the stairs.")
 
     waittype(
-        "You shine the flashlight around the room once more, spotting a wardrobe. Although it could contain useful tools and could be used as a hiding place, you think its risky to walk over there."
+        "You shine the flashlight around the room once more, spotting a wardrobe. Although it could contain useful tools and could be used as a hiding place, you think it would be hard to walk over there without the man noticing you."
     )
 
     options(
@@ -710,7 +796,7 @@ def hide2():
 
 
 def searchWardrobe2():
-    """searching the wardrobe after the man leaves after hide2()"""
+    """searching the wardrobe after the man leaves after hide2()/closet()"""
 
     waittype(
         "You hear the man shut the front door slowly behind him as he leaves your house."
@@ -723,8 +809,7 @@ def searchWardrobe2():
     waittype("After he leaves, you open the wardrobe doors and look inside.")
 
     generate(
-        ["a small dagger", "a tank of gasoline", "a bandaid", "nothing", "a hairpin",],
-        3,
+        ["a small dagger", "a tank of gasoline", "a bandage", "nothing", "a hairpin"]
     )
 
     waittype("You find" + item + " in the wardrobe.")
@@ -859,10 +944,8 @@ def lightsThree():
     )
 
     waittype(
-        "The wardrobe is open with nothing inside. There is a blanket on your bed, which you decide to take with you. You wrap it around your back like a robe.."
+        "The wardrobe is open with nothing inside. There is a blanket on your bed, which you decide to take with you. You wrap it around your back like a robe."
     )
-
-    inv.add("blanket")
 
     waittype(
         "You open the door to the hallway and walk down the stairs. The house is bare, no decorations or furniture anywhere."
@@ -891,7 +974,7 @@ def credits():
         "   _____              _ _ _       \n  / ____|            | (_) |      \n | |     _ __ ___  __| |_| |_ ___ \n | |    | '__/ _ \/ _` | | __/ __|\n | |____| | |  __/ (_| | | |_\__ \\\n  \_____|_|  \___|\__,_|_|\__|___/ \n\n Developers: ",
         ["  1. Jeffrey Zang", "  2. Li Feng Yin", "  3. Daniel Zhang", "\nBack"],
         [jeffInfo, liFengInfo, danInfo, startingMenu],
-        "Testers: \n	1. The Devs \n	2. yogogiddap	\n	3. Cookie's Older Brother \n	4. MIDNIGHT aka XxMoonlightxX9872",
+        "Special thanks to the contributors over at https://github.com/Yourself1011/Pukage/graphs/contributors/ \n\n1. Luke-Zhang-04\n\nBeta/alpha testers: \n	1. The Devs \n	2. yogogiddap#1332	\n	3. Cookie's Older Brother \n	4. I have no idea aka XxMoonlightxX9872",
     )
 
 
@@ -1112,17 +1195,20 @@ def startingMenu():
         "\u001b[33m  _____       _                    \n |  __ \     | |                   \n | |__) _   _| | ____ _  __ _  ___ \n |  ___| | | | |/ / _` |/ _` |/ _ \\\n | |   | |_| |   | (_| | (_| |  __/\n |_|    \__,_|_|\_\__,_|\__, |\___|\n                         __/ |     \n                        |___/      \u001b[0m",
         [
             "\u001b[32mStart game\u001b[0m",
+            "\u001b[34mLevel editor\u001b[0m",
             "\u001b[30;1mSettings\u001b[0m",
             "\u001b[33;1mCredits\u001b[0m",
             "\u001b[31mExit game\u001b[0m",
         ],
-        [intro, settings, credits, 'sys.exit("You exited the game.")'],
+        [intro, levelEditor.levelsMenu, settings, credits, 'sys.exit("You exited the game.")'],
         version,
     )
 
 
-def generate(choices: List[Any], numberOfChoices):
+def generate(choices: List[Any], *numberOfChoices):
     """Generates items"""
+    if not numberOfChoices:
+        numberOfChoices = len(choices)
     tempChoices = choices.copy()
     randomChoices = []
     menuItemsList = []
@@ -1132,6 +1218,8 @@ def generate(choices: List[Any], numberOfChoices):
 
     for i in range(1, numberOfChoices):
         int = randint(0, numberOfChoices)
+        print(tempChoices)
+        print(randomChoices)
         randomChoices.append(tempChoices[int - 1])
         tempChoices.pop(int - 1)
 
@@ -1144,6 +1232,8 @@ def generate(choices: List[Any], numberOfChoices):
     createMenu(
         "\n".join(scrolltype.log), menuItemsList, menuItemsFunctions, clear=False
     )
+
+    print(item)
 
     scrolltype.log.append("")
 
@@ -1332,3 +1422,4 @@ version = "v1.0.0-alpha"
 
 if __name__ == "__main__":
     startingMenu()
+    

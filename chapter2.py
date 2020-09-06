@@ -3,7 +3,7 @@ Pukage
 Choose-your-own-adventure game.
 https://github.com/Yourself1011/Pukage/
 
-Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng, and all Pukage contributors https://github.com/Yourself1011/Pukage/graphs/contributors/
+Copyright 2020 Daniel Zhang, Jeffrey Zang, Li Feng Yin, and all Pukage contributors https://github.com/Yourself1011/Pukage/graphs/contributors/
 
 MIT License
 """
@@ -33,6 +33,9 @@ from main import (
     clearConsole,
     fight,
     stats,
+    slept,
+    healed,
+    ate,
 )
 
 global lastWords
@@ -46,8 +49,9 @@ def Chapter2intro(endThing):
     clearConsole()
 
     global goneThroughTrapDoor
-
     goneThroughTrapDoor = False
+
+    global sawMan
 
     waittype("Chapter 2")
 
@@ -228,20 +232,21 @@ def exitThroughTrapdoor():
 
 
 def goBackInThroughTrapdoor():
-		"""going back in through the trapdoor"""
-		waittype("You climb back onto the boxes and go into the trapdoor. The lights are off and it is pitch black inside.")
+    """going back in through the trapdoor"""
+    waittype(
+        "You climb back onto the boxes and go into the trapdoor. The lights are off and it is pitch black inside."
+    )
 
-		options(
-			["Turn on the lights", "Leave"]
-			[lightsOn2, leaveRoom]
-		)
+    options(["Turn on the lights", "Leave"][lightsOn2, leaveRoom])
 
 
 def lightsOn2():
+	"""turning on the lights in the trapdoor room"""
 	tempEnd()
 
 
 def leaveRoom():
+	"""leaving the trapdoor room"""
 	tempEnd()
 
 
@@ -256,7 +261,10 @@ def hide5():
     )
 
     options(
-        ["Search the room", "Exit through the trapdoor", "Exit through the door"],
+        [
+            "Search the room", "Exit through the trapdoor",
+            "Exit through the door"
+        ],
         [searchRoom, exitThroughTrapdoor2, exitThroughDoor],
     )
 
@@ -301,22 +309,231 @@ def getIntoTrapdoorWithGenerator():
 
 def pleaseDontHurtMeImJustExploring():
     """saying pleaseDontHurtMeImJustExploring to the man"""
-		waittype('The man grunts and pulls you off of the ground. ')
+    waittype(
+        "The man grunts and pulls you off of the ground. Are you part of the Red Horse Gang?"
+    )
+
+    waittype(
+        '"Uhh...", you mutter.\n"Tell me!", says the man, taking a knife out of his pocket and puts it to your throat. "No!", you scream in horror.'
+    )
+
+    waittype(
+        'The man lets you go and you fall down to the ground in fright. He pulls you back up and sits down next to you. "Sorry about that. We\'ve always got to make sure, y\'know?"'
+    )
+
+    waittype(
+        '"Don\'t talk much, do you? Well, I guess I just put a knife to your throat, so. Why don\'t you come in for a bit, have a rest, eh?"'
+    )
+
+    options(["Go inside with the man", 'say, "No thanks."'])
+
+
+def goInWithTheMan():
+    waittype(
+        "The man opens the door to the building and walks inside. You are in some kind of lab with a huge counter surrounding the whole room. There is a large table with many chairs, cans, plates, and paper on it."
+    )
+
+    waittype(
+        "The man reaches into a small fridge under the counter and pulls out two drinks. He throws one to you and sits down at the table, brushing some papers onto the ground to make space."
+    )
+
+    waittype('"So! Where you from?", the man asks, taking a sip from his can.')
+
+    cityCountry = input("Where are you from? (city,country)")
+
+    waittype('"I\'m from ' + cityCountry + ' . What about you?"')
+
+    waittype(
+        '"I\'ve been here my whole life. This is my hometown.", said the man.')
+
+    waittype('"Ok. What is this place, anyway?"')
+
+    waittype(
+        '"This is Farside. A town on the west coast of Quebec, near Hudson\'s Bay.", said the man. You open the can and take a sip. The cool, refreshing liquid reminds you how thirsty you are.'
+    )
+
+    waittype(
+        '"Ahh...", said the man. "I think we got off on the wrong foot. Let\'s start over. My name\'s Daniel. People call me the Dan Man."'
+    )
+
+    waittype('"My name is..."')
+
+    uName = input("What is your name?")
+
+    waittype('"My name is"' + uName + '"."')
+
+    waittype('"Well, it\'s kinda late now. Wanna stay the night?"')
+
+    options(["Stay the night", 'say, "No thanks."'], [stay2, noThanks2])
+
+
+def stay2():
+    randomInt = randint(10, 100)
+    slept(randomInt)
+    if randomInt <= 25:
+      waittype("\nYou wake up from your nightmare, scared but glad that it is over.")
+
+    waittype("You were so tired last night that you fell asleep right away. You didn't notice anything in the large bedroom that you are in.")
+
+    waittype("You remember Dan from last night. You are glad that he helped you. You look around and see a staircase leading downstairs, a small wardrobe, another door, 2 closed windows with blinds, and a small desk and chair in the corner.")
+ 
+    options(["Go downstairs", "Open the wardrobe", "Go through the door", "Go over to the desk", "Look for the lights", "Open the windows"],[goDownstairs, searchWardrobe3, goThroughDoor, goToDesk, lights2, openWindows])
+
+
+def goDownstairs():
+	waittype("You get out of bed and start walking downstairs. Eerie paintings line the walls as you walk down. You enter the lab that you were in last night.")
+
+	waittype("You see another door and walk through it, entering a kitchen area. You see a sign on the fridge that says: 'cook food pls'. You think the man is still sleeping upstairs, so you get some food from the fridge and start preparing breakfast.")
+
+	waittype("You notice that it is still dark outside, even though you slept, but you don't think much of it. You eat the potatoes that you cooked and brew some coffee.")
+	
+	waittype("Daniel comes downstairs, looking tired and weary. He pours himself a cup of coffee and helps himself to the potatoes.")
+
+	waittype('"Good morning,"he says.')
+
+	waittype('"You too," you say.')
+
+	waittype('The man swallows and says, "Hmm. This is really good. How did you learn to make it?"\n\n"Um, I\'ve always liked to cook."')
+
+	waittype('"So, uh, do you have any other relatives?" asked Daniel. "Like, before all this, if you know what I mean."')
+
+	waittype('"Before all this? Before what?"')
+
+	waittype('"Well, before the Cactypus Engine failed, of course!" Daniel exclaimed.')
+
+	waittype('"What? Cactypus Engine? What? What are you talking about?", you ask.')
+
+	waittype('Daniel raises his eyebrows at you. Then, he notices a ring on your pinkie with the letter C engraved on it. "Are you... were you one of the scientists that survived? Are you the person Pam recued? Woah! I-I-I how! What? Wait, then you must know Pam, right?"')
+
+	waittype('"What? Who\'s Pam? What are you talking about?"')
+
+	waittype('Daniel pauses for a moment and takes a sip of coffee. "Ok. Let me tell you everything."')
+
+	goDownstairsContinued()
+
+
+def goDownstairsContinued():
+	clearConsole()
+	waittype('"About 300 years ago, in January of 2051, astronomers and scientists at NASA saw a large asteroid speeding towards Earth. The asteroid was predicted to come close to Earth, but not come in contact with it." Daniel paused and thinked.')
+
+	waittype('"This was a long time ago, obviously before you or I were born. The disease of 2020 had long since ended, and everything seemed to be going perfectly. People were inventing new things, self-driving cars were mass-produced, everything was fine. Until it wasn\'t."')
+
+	waittype('"When the asteroid came closer, scientists noticed that it was getting pulled toward Earth by gravity. Everyone panicked and it was like the pandemic all over again."')
+
+	waittype('"It sped up too quickly and there was no way to stop it. Eventually, it hit right in the Middle East, damaging lots of Asia, Europe, and Africa. Large shockwaves went on for days, the Earth\'s population was almost halved, and it was knocked out of the Sun\'s gravitational pull, speeding out of the solar system."')
+
+	waittype("Daniel took another sip of his coffee and made a disgusted face.")
+
+	clearConsole()
+
+	waittype('"Everyone was terrified. Millions of people died, but a very very smart group of scientists, mechanics, and computer programmers designed and made the Cactypus Engine, a 500,000,000 megawatt engine powered by the sun, the wind, and all of the shockwaves left over from the asteroid."')
+
+	waittype('"The Cactypus Engine was finished in 6 months, and was immediately put to use. It created mass so that the large dent left in the Earth by the asteroid was filled in. Then, the Earth would have enough mass to be able to orbit around the sun properly."')
+
+	waittype('"For decades, the Cactypus Engine kept the Earth in place and everyone lived happily. The population went back up, and the asteroid dent left in the Earth slowly became habitable. Everything seemed fine. Until it wasn\'t."')
+
+	waittype('"Around 3 years ago, a group of former terrorists came together to create the Red Horse Gang, with the goal of causing nothing but chaos and destruction."')
+
+	waittype('"At first, they just looted shops and scared old people. But slowly, they grew into bigger and bigger. One day, they came up with something really really evil. They would destory the Cactypus Engine."')
+
+	waittype("Daniel gets some cheese from the fridge and puts it into the microwave. He waits for a couple seconds, scoops the melted cheese out of the microwave with his hand, and slurps it up, leaving the excess cheese still inside the microwave.")
+
+	clearConsole()
+
+	waittype('Daniel continues. "They had a group of the most evil Red Horse People build an insane weapon to destory the engine. All of the people working on it had a ring just like yours. When the explosion happened, many people died, but some lucky scientists survived but lost their memories."')
+
+	waittype('"After the Cactypus Engine stopped working, the Earth flew away from the sun and is now just floating around in the solar system towards Jupiter, which is why it\'s always dark here."')
+
+	waittype('"Many people died, either from the heat of the sun or the cold of the night every day. The world seemed like it would collapse. But one day, Pam and 3 others decided to try and hunt down the Red Horse Gang themselves. They got me to come, too. We called it Operation Pukage."')
+
+	waittype('"We had tracked the Red Horse Gang\'s headquarters to here in Farside. All 10 of us moved into this building. We were up 24 hours a day, researching, looking through old abandoned libraries and things. Suddenly, all of our teammates except for Pam and I disappeared. We were really scared, because it meant that they were onto us. We were much more careful, wearing masks and staying away from people."')
+
+	waittype("Daniel stood up and walked around the room.")
+
+	clearConsole()
+
+	waittype('"One night, Pam went took the small plane that we had and flew to where the Cactypus Engine was. Miraculously, she found you there! She immediately brought you back to your old house, where you woke up yesterday. Right after she got back, she got a call from someone who said that they knew where our missing coworkers were. She called to tell me that she was going to find them. She left immediately."')
+
+	waittype("Daniel paused for a moment, thinking, and took a sip of your coffee, making a satisfied face instead of a disgusted one.")
+
+	waittype('"When I went to do the daily looting, I went to your house to look for supplies, just like I do on a regular basis. Pretty soon we\'re gonna have to move out of the city since the  things are running low. I know someone who\'s importing things from the sOuTh down by the river."')
+
+	waittype("Anyway, I was searching your house when you woke up there. You followed me back, and here we are.")
+
+	waittype('You sit there for a moment, stunned by everything he has just said. He takes another sip of your coffee.')
+
+	options(['ask, "Where is Pam now?"', 'ask, "So...can I help?"'],[wherePam, iHelpPls])
+
+
+def wherePam():
+		waittype('"So...where is Pam?" you ask. Daniel pauses for a moment and sighs. "She...hasn\'t come back." Your eyes grow big in horror. "We...we must try and find her!" you exclaim.')
+
+		waittype('"Yeah...I\'ve tried, but nothing not even a single clue. The only thing she said was that she was going to a factory of some sort."')
+
+		waittype('You look at the clock and realizes that it is noon already. "Oh!" Daniel says. "I better get going." He gets up and goes into the lab room. He rummages around for something. Suddenly, you have an idea. "Hey! I could help you find Pam!"')
+
+		waittype('Daniel perked up. "Woah! Why didn\'t I think of that! Of course you can help! Ok, ok, we\'ll get started right away." He seemed to have a big burst of enthusiasm. You smile to yourself. Or maybe it was just the coffee.')
+
+		sleep(3)
+
+		waittype("After taking a very short shower and changing clothes, you and Daniel go down to the lab to pick up some supplies.")
+
+		waittype('"So," Daniel says. "I think we should try to explore the city today and see if we can find the factory with Pam, or see if we can find where the little trade route is."')
+
+		options(['Try and find Pam', 'Try and find the trading route'],[letsfindpam, traderoute])
+
+
+def letsfindpam():
+	tempEnd()
+
+
+def traderoute():
+	tempEnd()
+
+
+def iHelpPls():
+	tempEnd()
+
+
+def searchWardrobe3():
+	tempEnd() 
+
+
+def goThroughDoor():
+	tempEnd()
+
+
+def goToDesk():
+	tempEnd()
+
+
+def lights2():
+	tempEnd()
+
+
+def openWindows():
+	tempEnd()
+
+
+def noThanks2():
+    tempEnd()
+
+
+def noThanks():
+    tempEnd()
 
 
 def fightMan():
     """trying to fight the man"""
     fight(
-        stats,
-        {
+        stats, {
             "health": 100,
             "maxDamage": 25,
             "critChance": 25,
             "critMulti": 2,
             "defense": 25,
             "escapeChance": 2,
-        }
-    )
+        })
     tempEnd()
 
 
@@ -386,7 +603,8 @@ def searchBoxes():
 
     inv.add(item)
 
-    waittype("In the second box, you found " + food + ". Would you like to eat it?")
+    waittype("In the second box, you found " + food +
+             ". Would you like to eat it?")
 
     print("1. Eat")
     print("2. Don't eat.")
@@ -405,7 +623,8 @@ def searchBoxes():
             gotHungry(-30)
             amountGained = "40"
 
-    waittype("You ate " + food + " and replenished " + amountGained + " hunger points.")
+    waittype("You ate " + food + " and replenished " + amountGained +
+             " hunger points.")
 
     options(
         [
@@ -428,7 +647,7 @@ def searchBoxes():
 
 
 def findAnotherWay():
-    """Tryin to find another way into the building"""
+    """Trying to find another way into the building"""
     tempEnd()
 
 
@@ -470,12 +689,14 @@ def confrontTheMan():
 
 def explore():
     """exploring the city"""
+    waittype("You decide to ignore the man and explore the city.")
+
     waittype(
-        "You decide to ignore the man and explore the city. The lighthouse is to your left, the house you came from to your right, and the building the man went in in front of you."
+        "You come to a fork in the road. The path to the left leads to a lighthouse while a bank and a restaurant are towards your right. The path in front of you leads to the building the man went in."
     )
 
     waittype(
-        "The building with the man is small but has multiple floors. The lighthouse and your house are quite far away. You see a light turn on in the man's building."
+        "The building where the man went is small but has multiple floors. The lighthouse and the house you came from are quite far away. You see a light turn on in the man's building."
     )
 
     waittype(
@@ -486,11 +707,11 @@ def explore():
         [
             "Go into the building with the man",
             "Go to the lighthouse",
-            "Go back to your house",
+            "Turn back and return to your house",
             "Go to the restaurant",
             "Go to the bank",
         ],
-        [follow3, lighthouse, backToHouse, restaurant, bank,],
+        [follow3, lighthouse, backToHouse, restaurant, bank],
     )
 
 
@@ -501,7 +722,134 @@ def backToHouse():
 
 def restaurant():
     """going to the restaurant"""
+
+    waittype(
+        "You decide to take the right fork and head towards the restaurant.")
+
+    waittype(
+        "You hear your footsteps rapping against the dirt path. You see the restaurant and the bank in the distance. You reach a road and hear your feet hit the tarmac."
+    )
+
+    waittype(
+      "You keep walking along the road, your feet barely making any sound. As you near the parking lot, you notice that the windows of both buildings are smashed and glass shards litter the ground."
+    )
+
+    waittype(
+      "You step inside the parking lot, which stretches around the entire building. But all of a sudden, you hear voices coming from the back of the restaurant.")
+
+
+    options([
+        "Investigate the noise", "Hide", "Enter the restaurant"
+        "Turn back and run"
+    ], 
+    [
+        investigateNoise, hideNearRestaurant, enterRestaurant,
+        runFromRestaurant
+    ])
+
+
+def investigateNoise():
+    """Investigating noise coming from the back of the restaurant"""
+
+    waittype(
+        "You sneak towards the back of the restaurant, dodging the glass pieces being illuminated by the bright moon. You poke your head around the corner and see..."
+    )
+
     tempEnd()
+
+
+def hideNearRestaurant():
+    """Searching for hiding places near the restaurant"""
+
+    waittype(
+        "You scan the area for hiding places. You see some thorny bushes near the parking lot where you are. The bushes are thick with green leaves and thorns. It might be able to conceal you."
+    )
+
+    waittype(
+        "You notice you can't see the restaurant interior because its pitch-dark and no lights are turned on. It would be a good place to hide, as long as nobody enters the restaurant."
+    )
+
+    waittype(
+        "The voices amplify in sound."
+    )
+
+    options([
+        "Hide in the bushes", "Stay where you are", "Enter the restaurant",
+        "Turn back and run"
+    ], [hideInBushes, stayAtRestaurant, enterRestaurant, runFromRestaurant])
+
+
+def hideInBushes():
+    """Hiding in some bushes near the restaurant"""
+
+    waittype(
+        "You sneak towards a cluster of green bushes, making sure the person or people at the back of building can't see you."
+    )
+
+    waittype(
+        "You drop to your knees and bury yourself in the bushes. The sharp thorns scratch your skin. You wince in pain."
+    )
+
+    gotHurt(2)
+
+    waittype(
+      "You try to see through the green thorns and bushes. You can see the outline of a person, who seems to be the leader, speaking to a large group of people.",
+
+      "You can barely hear them, but you catch a phrase every now and then.",
+
+      "...yeah, that's true...",
+
+      "...the Earth...",
+
+      "...don't know why...",
+
+      "...Red Horse Gang...",
+
+      
+    )
+
+    tempEnd()
+
+
+def runFromRestaurant():
+		"""Running away from restaurant"""
+		
+		if (randint(1, 3) == 1):
+			waittype(
+				"You turn around and run as fast as your legs could carry you. You reach the dirt path and slip because you ran too fast. You scrape your knee."
+			)
+		
+
+			hurtAmount = gotHurt(randint(1, 5))
+
+			if hurtAmount < 5:
+				waittype(
+					"You look at your knee. You see a faint white line where you fell. You get up and look behind you, nothing in sight.",
+
+					"You walk at a fast pace, looking at the lighthouse in the distance. You reach the same fork in the road that you saw earier."
+				)
+			
+			else:
+				waittype(
+					"You examine your knee, which is pink and bleeding. "
+				)
+		else:
+			tempEnd()
+    #options([follow3, lighthouse, backToHouse, restaurant, bank]) #uh
+    
+
+
+def stayAtRestaurant():
+    
+    waittype("")
+
+
+def enterRestaurant():
+    """Entering the restaurant"""
+
+    waittype(
+        "You head towards the door of the restaurant, situated near the left side of the building."
+    )
 
 
 def lighthouse():
